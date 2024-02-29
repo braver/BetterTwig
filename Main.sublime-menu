@@ -12,22 +12,13 @@
                 "children":
                 [
                     {
-                        "caption": "BetterTwig",
+                        "caption": "Twig",
                         "children": [
-                            {
-                                "caption": "Documentation",
-                                "command": "open_url",
-                                "args": {
-                                    "url": "https://github.com/Sublime-Instincts/BetterTwig/blob/master/README.md"
-                                },
-                            },
-                            { "caption": "-", },
                             {
                                 "caption": "Key Bindings",
                                 "command": "edit_settings",
                                 "args": {
-                                    "base_file": "${packages}/Twig/resources/keymaps/Default.sublime-keymap",
-                                    "default": "[\n\t${0}\n]\n",
+                                    "base_file": "${packages}/Twig/Default (${platform}).sublime-keymap",
                                 },
                             }
                         ],

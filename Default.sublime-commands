@@ -1,0 +1,9 @@
+[
+    {
+        "caption": "Preferences: Twig Key Bindings",
+        "command": "edit_settings",
+        "args": {
+            "base_file": "${packages}/Twig/Default (${platform}).sublime-keymap",
+        },
+    }
+]

@@ -42,4 +42,5 @@ node_modules/*
 
 # IDE #
 #######
-*.sublime-*
+/*.sublime-project
+/*.sublime-workspace
