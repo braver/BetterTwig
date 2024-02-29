@@ -84,7 +84,7 @@ contexts:
   expression_block:
     - match: '\{{2}({{modifiers}})?'
       captures:
-        0: punctuation.definition.placeholder.begin.twig
+        0: punctuation.definition.expression.begin.twig
         1: punctuation.definition.modifier.twig
       push:
         - meta_scope: meta.expression.twig
@@ -93,7 +93,7 @@ contexts:
   expression_block_embedded_in_string:
     - match: '\{{2}({{modifiers}})?'
       captures:
-        0: punctuation.definition.placeholder.begin.twig
+        0: punctuation.definition.expression.begin.twig
         1: punctuation.definition.modifier.twig
       push:
         - meta_scope: meta.expression.twig
@@ -103,7 +103,7 @@ contexts:
   expression_body:
     - match: '({{modifiers}})?\}{2}'
       captures:
-        0: punctuation.definition.placeholder.end.twig
+        0: punctuation.definition.expression.end.twig
         1: punctuation.definition.modifier.twig
       pop: 1
     - include: twig
