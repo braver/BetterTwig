@@ -53,46 +53,58 @@ contexts:
 ###[ Statements {% ]###########################################################
 
   statement_block:
-    - match: \{\%{{modifiers}}?
-      scope: punctuation.definition.statement.begin.twig
+    - match: '\{\%({{modifiers}})?'
+      captures:
+        0: punctuation.definition.statement.begin.twig
+        1: punctuation.definition.modifier.twig
       push:
         - meta_scope: meta.statement.twig
         - include: statement_body
 
   statement_block_embedded_in_string:
-    - match: \{\%{{modifiers}}?
-      scope: punctuation.definition.statement.begin.twig
+    - match: '\{\%({{modifiers}})?'
+      captures:
+        0: punctuation.definition.statement.begin.twig
+        1: punctuation.definition.modifier.twig
       push:
         - meta_scope: meta.statement.twig
         - clear_scopes: 1
         - include: statement_body
 
   statement_body:
-    - match: '{{modifiers}}?\%\}'
-      scope: punctuation.definition.statement.end.twig
+    - match: '({{modifiers}})?\%\}'
+      captures:
+        0: punctuation.definition.statement.end.twig
+        1: punctuation.definition.modifier.twig
       pop: 1
     - include: twig
 
 ###[ Expressions {{ ]##########################################################
 
   expression_block:
-    - match: \{{2}{{modifiers}}?
-      scope: punctuation.definition.placeholder.begin.twig
+    - match: '\{{2}({{modifiers}})?'
+      captures:
+        0: punctuation.definition.placeholder.begin.twig
+        1: punctuation.definition.modifier.twig
       push:
         - meta_scope: meta.expression.twig
         - include: expression_body
 
   expression_block_embedded_in_string:
-    - match: \{{2}{{modifiers}}?
-      scope: punctuation.definition.placeholder.begin.twig
+    - match: '\{{2}({{modifiers}})?'
+      captures:
+        0: punctuation.definition.placeholder.begin.twig
+        1: punctuation.definition.modifier.twig
       push:
         - meta_scope: meta.expression.twig
         - clear_scopes: 1
         - include: expression_body
 
   expression_body:
-    - match: '{{modifiers}}?\}{2}'
-      scope: punctuation.definition.placeholder.end.twig
+    - match: '({{modifiers}})?\}{2}'
+      captures:
+        0: punctuation.definition.placeholder.end.twig
+        1: punctuation.definition.modifier.twig
       pop: 1
     - include: twig
 
