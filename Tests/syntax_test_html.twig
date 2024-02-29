@@ -17,8 +17,18 @@
 {# https://twig.symfony.com/doc/3.x/templates.html#global-variables #}
 {{ _self }}
 |  ^^^^^ variable.language.twig
+{{ _charset }}
+|  ^^^^^^^^ variable.language.twig
 
 {# https://twig.symfony.com/doc/3.x/templates.html#setting-variables #}
 {% set foo = 'foo' %}
+|^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+|^ punctuation.definition.statement.begin.twig
+|<- punctuation.definition.statement.begin.twig
+|                  ^^ punctuation.definition.statement.end.twig
+|  ^^^ keyword.language.set.twig
+|      ^^^ meta.declaration.identifier.twig variable.other.twig
+|          ^ keyword.operator.assignment.twig
+|            ^^^^^ meta.declaration.value.twig meta.string.twig string.quoted.single.twig
 {% set foo = [1, 2] %}
 {% set foo = {'foo': 'bar'} %}

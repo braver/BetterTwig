@@ -11,6 +11,9 @@ variables:
   identifiers: '[a-zA-Z_]+(?:\d*)?'
   modifiers: '(?:[-~])'
 
+  statement_end: '({{modifiers}})?\%\}'
+  expression_end: '({{modifiers}})?\}{2}'
+
 ###############################################################################
 
 contexts:
@@ -25,6 +28,10 @@ contexts:
 
   immediately_pop:
     - match: ''
+      pop: 1
+
+  block_pop:
+    - match: '(?={{statement_end}}|{{expression_end}})'
       pop: 1
 
 ###[ Comments ]################################################################
@@ -72,7 +79,7 @@ contexts:
         - include: statement_body
 
   statement_body:
-    - match: '({{modifiers}})?\%\}'
+    - match: '{{statement_end}}'
       captures:
         0: punctuation.definition.statement.end.twig
         1: punctuation.definition.modifier.twig
@@ -101,7 +108,7 @@ contexts:
         - include: expression_body
 
   expression_body:
-    - match: '({{modifiers}})?\}{2}'
+    - match: '{{expression_end}}'
       captures:
         0: punctuation.definition.expression.end.twig
         1: punctuation.definition.modifier.twig
@@ -115,7 +122,7 @@ contexts:
       captures:
         0: meta.statement.twig
         1: punctuation.definition.statement.begin.twig
-        2: keyword.other.tag.twig
+        2: keyword.other.twig
         3: punctuation.definition.statement.end.twig
       push:
         - meta_scope: constant.character.twig
@@ -123,13 +130,14 @@ contexts:
           captures:
             0: meta.statement.twig
             1: punctuation.definition.statement.begin.twig
-            2: keyword.other.endtag.twig
+            2: keyword.other.twig
             3: punctuation.definition.statement.end.twig
           pop: 1
 
 ###[ The language itself ]#####################################################
 
   twig:
+    - include: block_pop
     - include: import_statements
     - include: get_item
     - include: data_structures
@@ -141,10 +149,11 @@ contexts:
     - include: constants
     - include: others
     - include: keywords
+    - include: declare_variable
     - include: variables
     - include: string
-    - include: number
-    # - include: dot_accessor
+    - include: float
+    - include: integer
     - include: parameters
     - include: ternary_operator
 
@@ -170,6 +179,80 @@ contexts:
         - include: immediately_pop
     - include: immediately_pop
 
+###[ Declaration ]#############################################################
+
+  declare_variable:
+    - match: \bset\b
+      scope: keyword.language.set.twig
+      push:
+        - include: block_pop
+        - match: '{{identifiers}}(?=\s*\=)'
+          scope: meta.declaration.identifier.twig variable.other.twig
+        - match: '='
+          scope: keyword.operator.assignment.twig
+          push:
+            - meta_scope: meta.declaration.value.twig
+            - include: twig
+            - include: block_pop
+
+
+###[ Operators ]###############################################################
+
+  operators:
+    - match: '\.{2}'
+      scope: keyword.operator.range.twig
+    - match: '\?{2}'
+      scope: keyword.operator.null-coalescing.twig
+    - match: '\?:'
+      scope: keyword.operator.ternary.twig
+    - match: \|
+      scope: keyword.operator.logical.pipe.twig
+      push:
+        - include: builtin_functions
+        - include: functions
+        - match: '{{identifiers}}+(?=\b)'
+          scope: variable.function.filter.twig
+        - include: immediately_pop
+    - match: \~
+      scope: keyword.operator.concatenation.twig
+    - match: \={2}
+      scope: keyword.operator.comparison.twig
+    - match: '[><!]='
+      scope: keyword.operator.comparison.twig
+    - match: '[><]'
+      scope: keyword.operator.comparison.twig
+    - match: '[\*\/]{2}'
+      scope: keyword.operator.arithmetic.twig
+    - match: '[\+\-\*\/\%]'
+      scope: keyword.operator.arithmetic.twig
+    - match: '='
+      scope: keyword.operator.assignment.twig
+
+###[ Language constants ]######################################################
+
+  constants:
+    - match: \b(true|false)\b
+      scope: constant.language.boolean.twig
+    - match: \b(none|null)\b
+      scope: constant.language.null.twig
+
+###[ Numbers ]#################################################################
+
+  integer:
+    - match: '(?:\d*_)?\d+'
+      scope: meta.number.integer.decimal.twig
+      captures:
+        0: constant.numeric.value.twig
+
+  float:
+    - match: '(?:(?:\d*_?)*)?(\.)\d+(?:[eE]\d*)?'
+      scope: meta.number.float.decimal.twig
+      captures:
+        0: constant.numeric.value.twig
+        1: punctuation.separator.decimal.twig
+
+
+
   keywords:
     - match: \b(if)\b
       scope: keyword.control.conditional.if.twig
@@ -189,10 +272,12 @@ contexts:
       scope: keyword.control.flow.break.twig
     - match: \b(in)\b
       scope: keyword.control.loop.for.in.twig
-    - match: '\b(block|recursive|macro|set|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|apply|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
-      scope: keyword.other.tag.twig
+    # start tags
+    - match: '\b(block|recursive|macro|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|apply|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
+      scope: keyword.other.twig
+    # end tags
     - match: '\b(endblock|endset|endfor|endmacro|endif|endwith|endautoescape|endapply|endembed|endsandbox|endcache)\b'
-      scope: keyword.other.endtag.twig
+      scope: keyword.other.twig
 
   others:
     - match: (\bignore\b)\s{1}(?=\bmissing\b)
@@ -463,57 +548,4 @@ contexts:
       scope: constant.character.escape.twig
     - match: \\['"]
       scope: constant.character.escape.twig
-
-  operators:
-    - match: '\.{2}'
-      scope: keyword.operator.range.twig
-    - match: '\?{2}'
-      scope: keyword.operator.null-coalescing.twig
-    - match: '\?:'
-      scope: keyword.operator.ternary.twig
-    - match: \|
-      scope: keyword.operator.logical.pipe.twig
-      push:
-        - include: builtin_functions
-        - include: functions
-        - match: '{{identifiers}}+(?=\b)'
-          scope: variable.function.filter.twig
-        - include: immediately_pop
-    - match: \~
-      scope: keyword.operator.concatenation.twig
-    - match: \={2}
-      scope: keyword.operator.comparison.twig
-    - match: \=
-      scope: keyword.operator.assignment.twig
-    - match: '[><!]='
-      scope: keyword.operator.comparison.twig
-    - match: '[><]'
-      scope: keyword.operator.comparison.twig
-    - match: '[\*\/]{2}'
-      scope: keyword.operator.arithmetic.twig
-    - match: '[\+\-\*\/\%]'
-      scope: keyword.operator.arithmetic.twig
-
-  constants:
-    - match: \b(true|false)\b
-      scope: constant.language.boolean.twig
-    - match: \b(none|null)\b
-      scope: constant.language.null.twig
-
-  number:
-    - include: float
-    - include: integer
-
-  integer:
-    - match: '(?:\d*_)?\d+'
-      scope: meta.number.integer.decimal.twig
-      captures:
-        0: constant.numeric.value.twig
-
-  float:
-    - match: '(?:(?:\d*_?)*)?(\.)\d+(?:[eE]\d*)?'
-      scope: meta.number.float.decimal.twig
-      captures:
-        0: constant.numeric.value.twig
-        1: punctuation.separator.decimal.twig
 

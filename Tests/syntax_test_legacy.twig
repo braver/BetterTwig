@@ -434,8 +434,8 @@
 ##                   ^^ punctuation.definition.statement.end.twig
 ##                      ^^ punctuation.definition.statement.begin.twig
 ##                                  ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ keyword.other.tag.twig
-##                         ^^^^^^^^ keyword.other.endtag.twig
+##     ^^^^^ keyword.other.twig
+##                         ^^^^^^^^ keyword.other.twig
 
     {% autoescape "html" %} {% endautoescape %}
 ##  ^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
@@ -445,8 +445,8 @@
 ##                          ^^ punctuation.definition.statement.begin.twig
 ##                                           ^^ punctuation.definition.statement.end.twig
 ##                ^^^^^^ meta.string.twig string.quoted.double.twig
-##     ^^^^^^^^^^ keyword.other.tag.twig
-##                             ^^^^^^^^^^^^^ keyword.other.endtag.twig
+##     ^^^^^^^^^^ keyword.other.twig
+##                             ^^^^^^^^^^^^^ keyword.other.twig
 
     {% apply upper %} {% endapply %}
 ##  ^^^^^^^^^^^^^^^^^ meta.statement.twig
@@ -455,8 +455,8 @@
 ##                 ^^ punctuation.definition.statement.end.twig
 ##                    ^^ punctuation.definition.statement.begin.twig
 ##                                ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ keyword.other.tag.twig
-##                       ^^^^^^^^ keyword.other.endtag.twig
+##     ^^^^^ keyword.other.twig
+##                       ^^^^^^^^ keyword.other.twig
 
     {% verbatim %} {% endverbatim %}
 ##  ^^^^^^^^^^^^^^ meta.statement.twig
@@ -465,8 +465,8 @@
 ##              ^^ punctuation.definition.statement.end.twig
 ##                 ^^ punctuation.definition.statement.begin.twig
 ##                                ^^ punctuation.definition.statement.end.twig
-##     ^^^^^^^^ keyword.other.tag.twig
-##                    ^^^^^^^^^^^ keyword.other.endtag.twig
+##     ^^^^^^^^ keyword.other.twig
+##                    ^^^^^^^^^^^ keyword.other.twig
 
     {% with %} {% endwith %}
 ##  ^^^^^^^^^^ meta.statement.twig
@@ -475,8 +475,8 @@
 ##          ^^ punctuation.definition.statement.end.twig
 ##             ^^ punctuation.definition.statement.begin.twig
 ##                        ^^ punctuation.definition.statement.end.twig
-##     ^^^^ keyword.other.tag.twig
-##                ^^^^^^^ keyword.other.endtag.twig
+##     ^^^^ keyword.other.twig
+##                ^^^^^^^ keyword.other.twig
 
     {% sandbox %} {% endsandbox %}
 ##  ^^^^^^^^^^^^^ meta.statement.twig
@@ -485,8 +485,8 @@
 ##             ^^ punctuation.definition.statement.end.twig
 ##                ^^ punctuation.definition.statement.begin.twig
 ##                              ^^ punctuation.definition.statement.end.twig
-##     ^^^^^^^ keyword.other.tag.twig
-##                   ^^^^^^^^^^ keyword.other.endtag.twig
+##     ^^^^^^^ keyword.other.twig
+##                   ^^^^^^^^^^ keyword.other.twig
 
     {% macro %} {% endmacro %}
 ##  ^^^^^^^^^^^ meta.statement.twig
@@ -495,8 +495,8 @@
 ##           ^^ punctuation.definition.statement.end.twig
 ##              ^^ punctuation.definition.statement.begin.twig
 ##                          ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ keyword.other.tag.twig
-##                 ^^^^^^^^ keyword.other.endtag.twig
+##     ^^^^^ keyword.other.twig
+##                 ^^^^^^^^ keyword.other.twig
 
     {% embed %} {% endembed %}
 ##  ^^^^^^^^^^^ meta.statement.twig
@@ -505,14 +505,14 @@
 ##           ^^ punctuation.definition.statement.end.twig
 ##              ^^ punctuation.definition.statement.begin.twig
 ##                          ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ keyword.other.tag.twig
-##                 ^^^^^^^^ keyword.other.endtag.twig
+##     ^^^^^ keyword.other.twig
+##                 ^^^^^^^^ keyword.other.twig
 
     {% set variable = "Hello, World" %}
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 ##  ^^ punctuation.definition.statement.begin.twig
 ##                                   ^^ punctuation.definition.statement.end.twig
-##     ^^^ keyword.other.tag.twig
+##     ^^^ keyword.language
 ##         ^^^^^^^^ variable.other.twig
 ##                  ^ keyword.operator.assignment.twig
 ##                    ^^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
@@ -524,15 +524,15 @@
 ##         ^^ punctuation.definition.statement.end.twig
 ##            ^^ punctuation.definition.statement.begin.twig
 ##                      ^^ punctuation.definition.statement.end.twig
-##     ^^^ keyword.other.tag.twig
-##               ^^^^^^ keyword.other.endtag.twig
+##     ^^^ keyword.language
+##               ^^^^^^ keyword.other.twig
 
     {% extends "template.twig" %}
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 ##  ^^ punctuation.definition.statement.begin.twig
 ##                             ^^ punctuation.definition.statement.end.twig
 ##             ^^^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
-##     ^^^^^^^ keyword.other.tag.twig
+##     ^^^^^^^ keyword.other.twig
 
     {% extends ["first.twig", "second.twig"] %}
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
@@ -556,13 +556,13 @@
 ##  ^^^^^^^^^^^ meta.statement.twig
 ##  ^^ punctuation.definition.statement.begin.twig
 ##           ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ keyword.other.tag.twig
+##     ^^^^^ keyword.other.twig
 
     {% deprecated "This template is deprecated" %}
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 ##  ^^ punctuation.definition.statement.begin.twig
 ##                                              ^^ punctuation.definition.statement.end.twig
-##     ^^^^^^^^^^ keyword.other.tag.twig
+##     ^^^^^^^^^^ keyword.other.twig
 ##                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
 
     {% set content = include('template.html') %}
