@@ -141,12 +141,34 @@ contexts:
     - include: constants
     - include: others
     - include: keywords
-    - include: identifier
+    - include: variables
     - include: string
     - include: number
-    - include: dot_accessor
+    # - include: dot_accessor
     - include: parameters
     - include: ternary_operator
+
+###[ Variables ]###############################################################
+
+  variables:
+    - match: \b_\b
+      scope: variable.language.blank.twig
+      push: variable_members
+    - match: \b(_self|_context|_charset)\b
+      scope: variable.language.twig
+      push: variable_members
+    - match: '{{identifiers}}'
+      scope: variable.other.twig
+      push: variable_members
+
+  variable_members:
+    - match: \.
+      scope: punctuation.accessor.dot.twig
+      push:
+        - match: '{{identifiers}}'
+          scope: meta.property.object.twig
+        - include: immediately_pop
+    - include: immediately_pop
 
   keywords:
     - match: \b(if)\b
@@ -222,7 +244,7 @@ contexts:
     - include: else_pop
 
   identifier_else_pop:
-    - include: identifier
+    - include: variables
     - match: \,
       scope: punctuation.separator.comma.twig
     - include: immediately_pop
@@ -231,38 +253,16 @@ contexts:
     - meta_scope: meta.import.twig
     - include: immediately_pop
 
-  identifier:
-    - match: \b_\b
-      scope: variable.language.blank.twig
-    - match: \b_self\b
-      scope: variable.language.twig
-    - match: '{{identifiers}}'
-      scope: variable.other.twig
 
   ternary_operator:
     - match: '\?'
       scope: keyword.operator.ternary.twig
       push:
-        - include: ternary_colon
-        - include: expressions_else_pop
-
-  expressions_else_pop:
-    - include: twig
-    - include: else_pop
-
-  ternary_colon:
-    - match: ':'
-      scope: keyword.operator.ternary.twig
-      pop: 1
-
-  dot_accessor:
-    - match: \.
-      scope: punctuation.accessor.dot.twig
-      push:
-        - include: functions
-        - match: '{{identifiers}}'
-          scope: meta.property.object.twig
-        - include: immediately_pop
+        - match: ':'
+          scope: keyword.operator.ternary.twig
+          pop: 1
+        - include: twig
+        - include: else_pop
 
   builtin_functions:
     - match: '(\b(?:attribute|block|constant|cycle|date|dump|html_classes|include|max|min|parent|random|range|source|country_timezones|template_from_string))(\()'
