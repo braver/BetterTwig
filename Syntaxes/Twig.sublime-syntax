@@ -6,47 +6,8 @@ version: 2
 hidden: true
 
 variables:
-  digit: '[0-9]'
-  integers: '(?:{{digit}}*_)?{{digit}}+'
-  floats: '(?:(?:{{digit}}*_?)*)?(\.){{digit}}+(?:[eE]{{digit}}*)?'
-  identifiers: '[a-zA-Z_]+(?:{{digit}}*)?'
-  regex_modifiers: '[eimsuxADJSUX]*'
-
+  identifiers: '[a-zA-Z_]+(?:\d*)?'
   modifiers: '(?:[-~])'
-  logical_operators: \b(?:and|or|not|is)\b
-  bitwise_operators: \b(?:b-and|b-or|b-xor)\b
-
-  builtin_tags: |-
-    (?x:
-      \b(?:
-          block|recursive|macro|set|extends|include|with|autoescape|pluralize
-          |scoped|as|starts|ends|matches|apply|do|flush|use|only|deprecated
-          |embed|sandbox|cache
-      )\b
-    )
-
-  end_tags: |-
-    (?x:
-      \b(?:
-        endblock|endset|endfor|endmacro|endif|endwith|endautoescape|endapply|endembed
-        |endsandbox|endcache
-      )\b
-    )
-
-  builtin_tests: |-
-    (?x:
-      \b(?:
-        constant|defined|divisible\s{1}by|empty|even|odd|iterable|odd|same\s{1}as
-      )\b
-    )
-
-  builtin_functions: |-
-    (?x:
-      \b(?:
-        attribute|block|constant|cycle|date|dump|html_classes|include|max|min
-        |parent|random|range|source|country_timezones|template_from_string
-      )
-    )
 
 contexts:
 
@@ -55,7 +16,7 @@ contexts:
       pop: 1
 
   immediately_pop:
-    - match: ""
+    - match: ''
       pop: 1
 
   comment:
@@ -195,9 +156,9 @@ contexts:
       scope: keyword.control.flow.continue.twig
     - match: \b(break)\b
       scope: keyword.control.flow.break.twig
-    - match: '{{builtin_tags}}'
+    - match: '\b(block|recursive|macro|set|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|apply|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
       scope: keyword.other.tag.twig
-    - match: '{{end_tags}}'
+    - match: '\b(endblock|endset|endfor|endmacro|endif|endwith|endautoescape|endapply|endembed|endsandbox|endcache)\b'
       scope: keyword.other.endtag.twig
     - match: \b(in)\b
       scope: keyword.control.loop.for.in.twig
@@ -295,14 +256,14 @@ contexts:
         - include: immediately_pop
 
   builtin_functions:
-    - match: ({{builtin_functions}})(\()
+    - match: '(\b(?:attribute|block|constant|cycle|date|dump|html_classes|include|max|min|parent|random|range|source|country_timezones|template_from_string))(\()'
       captures:
         1: support.function.builtin.twig
         2: punctuation.section.arguments.begin.twig
       push: functions_body
 
   builtin_tests:
-    - match: '{{builtin_tests}}'
+    - match: '\b(constant|defined|divisible\s{1}by|empty|even|odd|iterable|odd|same\s{1}as)\b'
       scope: support.function.test.twig
       push: parameters_else_pop
 
@@ -430,9 +391,9 @@ contexts:
       scope: punctuation.separator.sequence.twig
 
   logical_and_bitwise:
-    - match: '{{logical_operators}}'
+    - match: '\b(?:and|or|not|is)\b'
       scope: keyword.operator.word.logical.twig
-    - match: '{{bitwise_operators}}'
+    - match: '\b(?:b-and|b-or|b-xor)\b'
       scope: keyword.operator.word.bitwise.twig
 
   string:
@@ -539,13 +500,13 @@ contexts:
     - include: integer
 
   integer:
-    - match: '{{integers}}'
+    - match: '(?:\d*_)?\d+'
       scope: meta.number.integer.decimal.twig
       captures:
         0: constant.numeric.value.twig
 
   float:
-    - match: '{{floats}}'
+    - match: '(?:(?:\d*_?)*)?(\.)\d+(?:[eE]\d*)?'
       scope: meta.number.float.decimal.twig
       captures:
         0: constant.numeric.value.twig
