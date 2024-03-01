@@ -149,6 +149,7 @@ contexts:
     - include: constants
     - include: others
     - include: keywords
+    - include: filter
     - include: declare_variable
     - include: variables
     - include: string
@@ -195,6 +196,18 @@ contexts:
             - include: twig
             - include: block_pop
 
+###[ Filters ]#################################################################
+
+  filter:
+    - match: \|
+      scope: keyword.operator.pipe.twig
+      push:
+        - meta_scope: meta.function.filter.twig
+        - include: builtin_functions
+        - include: functions
+        - match: '{{identifiers}}(?=\b)'
+          scope: variable.function.filter.twig
+        - include: immediately_pop
 
 ###[ Operators ]###############################################################
 
@@ -205,14 +218,8 @@ contexts:
       scope: keyword.operator.null-coalescing.twig
     - match: '\?:'
       scope: keyword.operator.ternary.twig
-    - match: \|
+    - match: \|(?=\s)
       scope: keyword.operator.logical.pipe.twig
-      push:
-        - include: builtin_functions
-        - include: functions
-        - match: '{{identifiers}}+(?=\b)'
-          scope: variable.function.filter.twig
-        - include: immediately_pop
     - match: \~
       scope: keyword.operator.concatenation.twig
     - match: \={2}
@@ -251,8 +258,6 @@ contexts:
         0: constant.numeric.value.twig
         1: punctuation.separator.decimal.twig
 
-
-
   keywords:
     - match: \b(if)\b
       scope: keyword.control.conditional.if.twig
@@ -272,11 +277,13 @@ contexts:
       scope: keyword.control.flow.break.twig
     - match: \b(in)\b
       scope: keyword.control.loop.for.in.twig
+    - match: \b((end)?apply)\b
+      scope: keyword.langauge.apply.twig
     # start tags
-    - match: '\b(block|recursive|macro|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|apply|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
+    - match: '\b(block|recursive|macro|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
       scope: keyword.other.twig
     # end tags
-    - match: '\b(endblock|endset|endfor|endmacro|endif|endwith|endautoescape|endapply|endembed|endsandbox|endcache)\b'
+    - match: '\b(endblock|endset|endfor|endmacro|endif|endwith|endautoescape|endembed|endsandbox|endcache)\b'
       scope: keyword.other.twig
 
   others:
@@ -353,7 +360,7 @@ contexts:
     - match: '(\b(?:attribute|block|constant|cycle|date|dump|html_classes|include|max|min|parent|random|range|source|country_timezones|template_from_string))(\()'
       captures:
         1: support.function.builtin.twig
-        2: punctuation.section.arguments.begin.twig
+        2: punctuation.section.group.begin.twig
       push: functions_body
 
   builtin_tests:
@@ -363,14 +370,14 @@ contexts:
 
   parameters_else_pop:
     - match: \(
-      scope: punctuation.section.arguments.begin.twig
+      scope: punctuation.section.group.begin.twig
       set: parameters_body
     - include: else_pop
 
   parameters_body:
     - meta_scope: meta.function-call.arguments.twig
     - match: \)
-      scope: punctuation.section.arguments.end.twig
+      scope: punctuation.section.group.end.twig
       pop: 1
     - include: twig
     - match: \,
@@ -380,13 +387,13 @@ contexts:
     - match: (\w+)(\()
       captures:
         1: variable.function.twig
-        2: punctuation.section.arguments.begin.twig
+        2: punctuation.section.group.begin.twig
       push: functions_body
 
   functions_body:
-    - meta_content_scope: meta.function-call.arguments.twig
+    - meta_scope: meta.group.twig meta.function-call.arguments.twig
     - match: \)
-      scope: punctuation.section.arguments.end.twig
+      scope: punctuation.section.group.end.twig
       pop: 1
     - include: parameters
     - include: twig
@@ -427,9 +434,9 @@ contexts:
     - match: \]
       scope: punctuation.section.sequence.end.twig
       pop: 1
-    - include: twig
-    - match: \,
+    - match: ','
       scope: punctuation.separator.sequence.twig
+    - include: twig
 
   dictionary:
     - match: \{
@@ -441,11 +448,11 @@ contexts:
     - match: \}
       scope: punctuation.section.mapping.end.twig
       pop: 1
-    - include: twig
     - match: ':'
       scope: punctuation.separator.mapping.key-value.twig
-    - match: \,
+    - match: ','
       scope: punctuation.separator.mapping.pair.twig
+    - include: twig
 
   tuple_or_group:
     - match: (?=\()

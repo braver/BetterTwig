@@ -14,8 +14,8 @@
 ## ^^ punctuation.definition.statement.begin.twig
 ##                                                  ^^ punctuation.definition.statement.end.twig
 ##                      ^^^^^^^^ support.function.builtin.twig
-##                              ^ punctuation.section.arguments.begin.twig
-##                                                ^ punctuation.section.arguments.end.twig
+##                              ^ punctuation.section.group.begin.twig
+##                                                ^ punctuation.section.group.end.twig
 ##                               ^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
 
    {% if var is defined and foo.method(var) is defined %}
@@ -570,7 +570,7 @@
 ##  ^^ punctuation.definition.statement.begin.twig
 ##                                            ^^ punctuation.definition.statement.end.twig
 ##                   ^^^^^^^ support.function.builtin.twig
-##                          ^ punctuation.section.arguments.begin.twig
+##                          ^ punctuation.section.group.begin.twig
 ##                           ^^^^^^^^^^^^^^^ meta.function-call.arguments.twig string.quoted.single.twig
 
     {% if %} {% else %} {% endif %}
@@ -698,7 +698,7 @@
 ##  ^^^^^^^^^^^^^^^^^^^ meta.expression.twig
 ##  ^^ punctuation.definition.expression.begin.twig
 ##                   ^^ meta.expression.twig punctuation.definition.expression.end.twig
-##            ^ keyword.operator.logical.pipe.twig
+##            ^ keyword.operator.pipe.twig
 ##             ^^^^^ variable.function.filter.twig
     {{ 'value'|count_filter}}
 ##             ^^^^^^^^^^^^ variable.function.filter.twig
@@ -708,7 +708,7 @@
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
 ##  ^^ punctuation.definition.expression.begin.twig
 ##                           ^^ meta.expression.twig punctuation.definition.expression.end.twig
-##            ^ keyword.operator.logical.pipe.twig
+##            ^ keyword.operator.pipe.twig
 ##             ^^^^^^^ - variable.function.filter.twig
 ##             ^^^^^^^ variable.function.twig
 ##                     ^^^^ meta.function-call.arguments.twig
