@@ -289,6 +289,8 @@ contexts:
         0: constant.numeric.value.twig
         1: punctuation.separator.decimal.twig
 
+###[ Keywords ]################################################################
+
   keywords:
     - match: \b((end)?if)\b
       scope: keyword.control.conditional.if.twig
@@ -329,6 +331,22 @@ contexts:
     - match: (\bwithout\b)\s{1}(?=\bcontext\b)
       captures:
         1: keyword.other.twig
+
+  logical_and_bitwise:
+    - match: '\b(?:and|or|not|is)\b'
+      scope: keyword.operator.word.logical.twig
+    - match: '\b(?:b-and|b-or|b-xor)\b'
+      scope: keyword.operator.word.bitwise.twig
+
+  ternary_operator:
+    - match: '\?'
+      scope: keyword.operator.ternary.twig
+      push:
+        - match: ':'
+          scope: keyword.operator.ternary.twig
+          pop: 1
+        - include: twig
+        - include: else_pop
 
   import_statements:
     - match: \b(import)\b
@@ -372,17 +390,6 @@ contexts:
     - meta_scope: meta.import.twig
     - include: immediately_pop
 
-
-  ternary_operator:
-    - match: '\?'
-      scope: keyword.operator.ternary.twig
-      push:
-        - match: ':'
-          scope: keyword.operator.ternary.twig
-          pop: 1
-        - include: twig
-        - include: else_pop
-
   builtin_tests:
     - match: '\b(constant|defined|divisible\s{1}by|empty|even|odd|iterable|odd|same\s{1}as)\b'
       scope: support.function.test.twig
@@ -417,6 +424,8 @@ contexts:
       pop: 1
     - include: string
     - include: integer
+
+###[ Data structures ]#########################################################
 
   data_structures:
     - include: array
@@ -490,11 +499,7 @@ contexts:
     - match: \,
       scope: punctuation.separator.sequence.twig
 
-  logical_and_bitwise:
-    - match: '\b(?:and|or|not|is)\b'
-      scope: keyword.operator.word.logical.twig
-    - match: '\b(?:b-and|b-or|b-xor)\b'
-      scope: keyword.operator.word.bitwise.twig
+###[ Stringa ]#################################################################
 
   string:
     - include: single_quoted_string

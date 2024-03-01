@@ -165,3 +165,44 @@
 | Control Structure
 | https://twig.symfony.com/doc/3.x/templates.html#control-structure
 |==============================================================================
+
+<h1>Members</h1>
+<ul>
+    {% for user in users %}
+|   ^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+|   ^^ punctuation.definition.statement.begin.twig
+|      ^^^ keyword.control.loop.for.twig
+|          ^^^^ variable.other.twig
+|               ^^ keyword.control.loop.for.in.twig
+|                  ^^^^^ variable.other.twig
+|                        ^^ punctuation.definition.statement.end.twig
+        <li>{{ user.username|e }}</li>
+    {% endfor %}
+</ul>
+
+{% if users|length > 0 %}
+|^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+|^ punctuation.definition.statement.begin.twig
+|  ^^ keyword.control.conditional.if.twig
+|     ^^^^^ variable.other.twig
+|          ^^^^^^^ meta.function.filter.twig
+|          ^ keyword.operator.pipe.twig
+|           ^^^^^^ meta.function-call.identifier.twig support.function.filter.twig
+|                  ^ keyword.operator.comparison.twig
+|                    ^ meta.number.integer.decimal.twig
+|                      ^^ punctuation.definition.statement.end.twig
+    <ul>
+        {% for user in users %}
+            <li>{{ user.username|e }}</li>
+|               ^^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
+|               ^^ punctuation.definition.expression.begin.twig
+|                  ^^^^ variable.other.twig
+|                      ^ punctuation.accessor.dot.twig
+|                       ^^^^^^^^ meta.property.object.twig
+|                               ^^ meta.function.filter.twig
+|                               ^ keyword.operator.pipe.twig
+|                                ^ meta.function-call.identifier.twig variable.function.filter.twig
+|                                  ^^ punctuation.definition.expression.end.twig
+        {% endfor %}
+    </ul>
+{% endif %}
