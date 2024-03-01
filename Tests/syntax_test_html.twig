@@ -26,7 +26,7 @@
 |^ punctuation.definition.statement.begin.twig
 |<- punctuation.definition.statement.begin.twig
 |                  ^^ punctuation.definition.statement.end.twig
-|  ^^^ keyword.language.set.twig
+|  ^^^ keyword.declaration.twig
 |      ^^^ meta.declaration.identifier.twig variable.other.twig
 |          ^ keyword.operator.assignment.twig
 |            ^^^^^ meta.declaration.value.twig meta.string.twig string.quoted.single.twig
@@ -56,14 +56,16 @@
 |      ^^^^^^^^^^^^^^^^ meta.function.filter.twig
 |                      ^ - meta.function.filter.twig
 |      ^ keyword.operator.pipe.twig
-|       ^^^^^^^^^ variable.function.filter.twig
+|       ^^^^^^^^^ support.function.filter.twig
 |                ^ keyword.operator.pipe.twig
-|                 ^^^^^ variable.function.filter.twig
+|                 ^^^^^ support.function.filter.twig
 
 {{ list|join(', ') }}
 |  ^^^^ variable.other.twig
-|      ^^^^^^^^^^^ meta.function.filter.twig
+|      ^^^^^ meta.function.filter.twig
 |           ^^^^^^ meta.group.twig meta.function-call.arguments.twig
+|          ^ - meta.group.twig
+|          ^ - meta.function-call.arguments.twig
 |           ^ punctuation.section.group.begin.twig
 |            ^^^^ meta.string.twig string.quoted.single.twig
 |                ^ punctuation.section.group.end.twig
@@ -71,8 +73,95 @@
 |                 ^ - meta.function.filter.twig
 
 {% apply upper %}
-|  ^^^^^ keyword.langauge.apply.twig
+|  ^^^^^ support.function.apply.twig
 |        ^^^^^ variable.other.twig
     This text becomes uppercase
 {% endapply %}
-|  ^^^^^^^^ keyword.langauge.apply.twig
+|  ^^^^^^^^ support.function.apply.twig
+
+|==============================================================================
+| Functions
+| https://twig.symfony.com/doc/3.x/templates.html#functions
+|==============================================================================
+
+{% for i in range(0, 3) %}
+|^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+|  ^^^ keyword.control.loop.for.twig
+|      ^ variable.other.twig
+|           ^^^^^ - meta.function-call.arguments.twig
+|           ^^^^^ support.function.twig
+|                ^ punctuation.section.group.begin.twig
+|                ^^^^^^ meta.group.twig
+|                ^^^^^^ meta.function-call.arguments.twig
+|                 ^ constant.numeric.value.twig
+|                  ^ punctuation.separator.parameters.twig
+|                     ^ punctuation.section.group.end.twig
+
+    {{ i }},
+{% endfor %}
+|  ^^^^^^ keyword.control.loop.for.twig
+
+{# https://twig.symfony.com/doc/3.x/templates.html#named-arguments #}
+{% for i in range(low=1, high=10, step=2) %}
+|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+|  ^^^ keyword.control.loop.for.twig
+|      ^ variable.other.twig
+|        ^^ meta.statement.twig keyword.control.loop.for.in.twig
+|           ^^^^^ meta.function-call.identifier.twig
+|           ^^^^^ - meta.function-call.arguments.twig
+|           ^^^^^ support.function.twig
+|                ^ punctuation.section.group.begin.twig
+|                ^^^^^^^^^^^^^^^^^^^^^^^^ meta.group.twig
+|                ^^^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.arguments.twig
+|                                       ^ punctuation.section.group.end.twig
+|                      ^ punctuation.separator.parameters.twig
+|                               ^ punctuation.separator.parameters.twig
+|                 ^^^ variable.parameter.twig
+|                    ^ keyword.operator.assignment.twig
+|                     ^ constant.numeric.value.twig
+    {{ i }},
+{% endfor %}
+
+{{ data|convert_encoding('UTF-8', 'iso-2022-jp') }}
+|      ^ meta.function.filter.twig keyword.operator.pipe.twig
+|       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.filter.twig
+|       ^^^^^^^^^^^^^^^^ support.function.filter.twig
+|       ^^^^^^^^^^^^^^^^ meta.function-call.identifier.twig
+|                       ^^^^^^^^^^^^^^^^^^^^^^^^ meta.group.twig meta.function-call.arguments.twig
+|                       ^ punctuation.section.group.begin.twig
+|                        ^^^^^^^ string.quoted.single.twig
+|                               ^ punctuation.separator.parameters.twig
+|                                 ^^^^^^^^^^^^^ string.quoted.single.twig
+|                                              ^ punctuation.section.group.end.twig
+
+{# versus #}
+|^^^^^^^^^^^ comment.block.twig
+
+{{ data|convert_encoding(from='iso-2022-jp', to='UTF-8') }}
+|                        ^^^^ variable.parameter.twig
+|                            ^ keyword.operator.assignment.twig
+|                             ^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
+|                                          ^ punctuation.separator.parameters.twig
+|                                            ^^ variable.parameter.twig
+|                                              ^ keyword.operator.assignment.twig
+|                                               ^^^^^^^ meta.string.twig string.quoted.single.twig
+
+{# the first argument is the date format, which defaults to the global date format if null is passed #}
+{{ "now"|date(null, "Europe/Paris") }}
+|  ^^^^^ meta.string.twig string.quoted.double.twig
+|       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.filter.twig
+|        ^^^^ meta.function-call.identifier.twig support.function.filter.twig
+|             ^^^^ constant.language.null.twig
+|                   ^^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
+
+{# or skip the format value by using a named argument for the time zone #}
+{{ "now"|date(timezone="Europe/Paris") }}
+|             ^^^^^^^^ variable.parameter.twig
+
+{{ "now"|date('d/m/Y H:i', timezone="Europe/Paris") }}
+|             ^^^^^^^^^^^ meta.function.filter.twig meta.group.twig meta.function-call.arguments.twig meta.string.twig string.quoted.single.twig
+
+|==============================================================================
+| Control Structure
+| https://twig.symfony.com/doc/3.x/templates.html#control-structure
+|==============================================================================

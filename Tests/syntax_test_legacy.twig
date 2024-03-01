@@ -6,14 +6,14 @@
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
 ##  ^^ punctuation.definition.expression.begin.twig
 ##                                                                                      ^^ meta.expression.twig punctuation.definition.expression.end.twig
-##     ^^^^^^^^^ support.function.builtin.twig
+##     ^^^^^^^^^ support.function
 
 
    {% if post.status is constant('Post::PUBLISHED') %}
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 ## ^^ punctuation.definition.statement.begin.twig
 ##                                                  ^^ punctuation.definition.statement.end.twig
-##                      ^^^^^^^^ support.function.builtin.twig
+##                      ^^^^^^^^ support.function
 ##                              ^ punctuation.section.group.begin.twig
 ##                                                ^ punctuation.section.group.end.twig
 ##                               ^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
@@ -425,7 +425,7 @@
 ##     ^^^ keyword.control.loop.for.twig
 ##              ^^ keyword.control.loop.for.in.twig
 ##         ^^^^ variable.other.twig
-##                             ^^^^^^ keyword.control.loop.end.twig
+##                             ^^^^^^ keyword.control.loop
 
     {% block block_1 %} {% endblock %}
 ##  ^^^^^^^^^^^^^^^^^^^ meta.statement.twig
@@ -455,8 +455,8 @@
 ##                 ^^ punctuation.definition.statement.end.twig
 ##                    ^^ punctuation.definition.statement.begin.twig
 ##                                ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ keyword.other.twig
-##                       ^^^^^^^^ keyword.other.twig
+##     ^^^^^ support.function
+##                       ^^^^^^^^ support.function
 
     {% verbatim %} {% endverbatim %}
 ##  ^^^^^^^^^^^^^^ meta.statement.twig
@@ -512,7 +512,7 @@
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 ##  ^^ punctuation.definition.statement.begin.twig
 ##                                   ^^ punctuation.definition.statement.end.twig
-##     ^^^ keyword.language
+##     ^^^ keyword.declaration
 ##         ^^^^^^^^ variable.other.twig
 ##                  ^ keyword.operator.assignment.twig
 ##                    ^^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
@@ -524,7 +524,7 @@
 ##         ^^ punctuation.definition.statement.end.twig
 ##            ^^ punctuation.definition.statement.begin.twig
 ##                      ^^ punctuation.definition.statement.end.twig
-##     ^^^ keyword.language
+##     ^^^ keyword.declaration
 ##               ^^^^^^ keyword.other.twig
 
     {% extends "template.twig" %}
@@ -569,7 +569,7 @@
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 ##  ^^ punctuation.definition.statement.begin.twig
 ##                                            ^^ punctuation.definition.statement.end.twig
-##                   ^^^^^^^ support.function.builtin.twig
+##                   ^^^^^^^ support.function
 ##                          ^ punctuation.section.group.begin.twig
 ##                           ^^^^^^^^^^^^^^^ meta.function-call.arguments.twig string.quoted.single.twig
 
@@ -585,7 +585,7 @@
 ##                               ^^ punctuation.definition.statement.end.twig
 ##     ^^ keyword.control.conditional.if.twig
 ##              ^^^^ keyword.control.conditional.else.twig
-##                         ^^^^^ keyword.control.conditional.end.twig
+##                         ^^^^^ keyword.control.conditional
 
     {% | %}
 ##  ^^^^^^^ meta.statement.twig
@@ -710,5 +710,5 @@
 ##                           ^^ meta.expression.twig punctuation.definition.expression.end.twig
 ##            ^ keyword.operator.pipe.twig
 ##             ^^^^^^^ - variable.function.filter.twig
-##             ^^^^^^^ variable.function.twig
+##             ^^^^^^^ support.function
 ##                     ^^^^ meta.function-call.arguments.twig
