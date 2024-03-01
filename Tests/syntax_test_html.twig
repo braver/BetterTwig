@@ -206,3 +206,18 @@
         {% endfor %}
     </ul>
 {% endif %}
+
+|==============================================================================
+| Comments
+| https://twig.symfony.com/doc/3.x/templates.html#comments
+|==============================================================================
+
+{# note: disabled template because we no longer use this
+|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.block.twig
+|^ punctuation.definition.comment.begin.twig
+    {% for user in users %}
+|^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.block.twig
+        ...
+    {% endfor %}
+#}
+|^ comment.block.twig punctuation.definition.comment.end.twig

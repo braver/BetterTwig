@@ -499,7 +499,7 @@ contexts:
     - match: \,
       scope: punctuation.separator.sequence.twig
 
-###[ Stringa ]#################################################################
+###[ Strings ]#################################################################
 
   string:
     - include: single_quoted_string
