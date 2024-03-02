@@ -190,7 +190,7 @@ contexts:
         - match: '='
           scope: keyword.operator.assignment.twig
           push:
-            - meta_scope: meta.declaration.value.twig
+            - meta_content_scope: meta.declaration.value.twig
             - include: twig
             - include: block_pop
 

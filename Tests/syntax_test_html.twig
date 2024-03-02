@@ -317,3 +317,135 @@
     ...
     {{ parent() }}
 {% endblock %}
+
+|==============================================================================
+| HTML Escaping
+| https://twig.symfony.com/doc/3.x/templates.html#html-escaping
+|==============================================================================
+
+{{ user.username|e }}
+|^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
+|               ^^ meta.function.filter.twig
+|               ^ keyword.operator.pipe.twig
+|                ^ meta.function-call.identifier.twig variable.function.filter.twig
+
+{{ user.username|e('js') }}
+|^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
+|               ^^^^^^^^ meta.function.filter.twig
+|               ^ keyword.operator.pipe.twig
+|                ^ meta.function-call.identifier.twig variable.function.filter.twig
+|                 ^^^^^^ meta.group.twig meta.function-call.arguments.twig
+|                 ^ punctuation.section.group.begin.twig
+|                  ^^^^ meta.string.twig string.quoted.single.twig
+|                      ^ punctuation.section.group.end.twig
+
+{{ user.username|e('css') }}
+{{ user.username|e('url') }}
+{{ user.username|e('html_attr') }}
+
+{# https://twig.symfony.com/doc/3.x/templates.html#working-with-automatic-escaping #}
+{% autoescape %}
+|  ^^^^^^^^^^ keyword.other.twig
+    Everything will be automatically escaped in this block (using the HTML strategy)
+{% endautoescape %}
+
+{% autoescape 'js' %}
+|  ^^^^^^^^^^ keyword.other.twig
+|             ^^^^ meta.string.twig string.quoted.single.twig
+|             ^ punctuation.definition.string.begin.twig
+|                ^ punctuation.definition.string.end.twig
+    Everything will be automatically escaped in this block (using the JS strategy)
+{% endautoescape %}
+
+{# https://twig.symfony.com/doc/3.x/templates.html#escaping #}
+{{ '{{' }}
+|  ^^^^ meta.string.twig string.quoted.single.twig
+|  ^ punctuation.definition.string.begin.twig
+|   ^^ constant.character.escape.twig
+|     ^ punctuation.definition.string.end.twig
+
+|==============================================================================
+| Expressions
+| https://twig.symfony.com/doc/3.x/templates.html#expressions
+|==============================================================================
+
+{% set greeting = 'Hello ' %}
+|                 ^^^^^^^^ meta.string.twig string.quoted.single.twig
+|                          ^^ punctuation.definition.statement.end.twig
+{% set name = 'Fabien' %}
+
+{{ greeting ~ name|lower }}   {# Hello fabien #}
+
+{# use parenthesis to change precedence #}
+{{ (greeting ~ name)|lower }} {# hello fabien #}
+|^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
+|^ punctuation.definition.expression.begin.twig
+|  ^^^^^^^^^^^^^^^^^ meta.group.twig
+|  ^ punctuation.section.group.begin.twig
+|   ^^^^^^^^ variable.other.twig
+|            ^ keyword.operator.concatenation.twig
+|              ^^^^ variable.other.twig
+|                  ^ punctuation.section.group.end.twig
+|                   ^^^^^^ meta.function.filter.twig
+|                   ^ keyword.operator.pipe.twig
+|                    ^^^^^ meta.function-call.identifier.twig support.function.filter.twig
+|                          ^^ punctuation.definition.expression.end.twig
+|                             ^^^^^^^^^^^^^^^^^^ comment.block.twig
+|                             ^^ punctuation.definition.comment.begin.twig
+|                                             ^^ punctuation.definition.comment.end.twig
+
+{# https://twig.symfony.com/doc/3.x/templates.html#literals #}
+{% set foo = [1, {"foo": "bar"}] %}
+|      ^^^ meta.declaration.identifier.twig variable.other.twig
+|          ^ - meta.declaration.value.twig
+|            ^^^^^^^^^^^^^^^^^^^ meta.declaration.value.twig
+|                                ^ - meta.declaration.value.twig
+|          ^ keyword.operator.assignment.twig
+|            ^^^^^^^^^^^^^^^^^^^ meta.sequence.array.twig
+|            ^ punctuation.section.sequence.begin.twig
+|             ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|              ^ punctuation.separator.sequence.twig
+|                ^^^^^^^^^^^^^^ meta.mapping.twig
+|                ^ punctuation.section.mapping.begin.twig
+|                 ^^^^^ meta.string.twig string.quoted.double.twig
+|                 ^ punctuation.definition.string.begin.twig
+|                     ^ punctuation.definition.string.end.twig
+|                      ^ punctuation.separator.mapping.key-value.twig
+|                        ^^^^^ meta.string.twig string.quoted.double.twig
+|                        ^ punctuation.definition.string.begin.twig
+|                            ^ punctuation.definition.string.end.twig
+|                             ^ punctuation.section.mapping.end.twig
+|                              ^ punctuation.section.sequence.end.twig
+|                                ^^ punctuation.definition.statement.end.twig
+
+{# https://twig.symfony.com/doc/3.x/templates.html#math #}
+{{ 1 + 1 }}
+{{ 3 - 2 }}
+{{ 1 / 2 }} is {{ 0.5 }}
+|  ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|    ^ keyword.operator.arithmetic.twig
+|      ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                 ^^^ meta.number.float.decimal.twig constant.numeric.value.twig
+|                  ^ punctuation.separator.decimal.twig
+{{ 11 % 7 }} is 4
+|  ^^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|     ^ keyword.operator.arithmetic.twig
+|       ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+{{ 20 // 7 }} is 2, {{ -20  // 7 }} is -3
+|     ^^ keyword.operator.arithmetic.twig
+|        ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                      ^ keyword.operator.arithmetic.twig
+|                       ^^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                           ^^ keyword.operator.arithmetic.twig
+|                              ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+{{ 2 * 2 }}
+{{ 2 ** 3 }}
+
+{# https://twig.symfony.com/doc/3.x/templates.html#logic #}
+{{ and }}{{ or }}{{ not }}{{ and not }}
+|  ^^^ keyword.operator.word.logical.twig
+
+|==============================================================================
+| Comparisons
+| https://twig.symfony.com/doc/3.x/templates.html#comparisons
+|==============================================================================
