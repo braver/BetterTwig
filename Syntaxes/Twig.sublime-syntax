@@ -308,8 +308,14 @@ contexts:
       scope: keyword.control.loop.for.in.twig
     - match: \b((end)?apply)\b
       scope: support.function.apply.twig
+    - match: \b((end)?block)\b
+      scope: support.function.block.twig
+      push:
+        - match: '{{identifiers}}'
+          scope: meta.generic-name.twig
+        - include: block_pop
     # start tags
-    - match: '\b(block|recursive|macro|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
+    - match: '\b(recursive|macro|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
       scope: keyword.other.twig
     # end tags
     - match: '\b(endblock|endset|endfor|endmacro|endif|endwith|endautoescape|endembed|endsandbox|endcache)\b'
