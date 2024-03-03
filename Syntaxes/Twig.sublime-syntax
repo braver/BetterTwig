@@ -265,6 +265,8 @@ contexts:
 ###[ Operators ]###############################################################
 
   operators:
+    - match: '\.{3}'
+      scope: keyword.operator.spread.twig
     - match: '\.{2}'
       scope: keyword.operator.range.twig
     - match: '\?{2}'
@@ -511,7 +513,7 @@ contexts:
           scope: punctuation.section.sequence.end.twig
           pop: 1
         - include: twig
-        - match: \,
+        - match: ','
           scope: punctuation.separator.sequence.twig
 
   parameters:
@@ -525,7 +527,7 @@ contexts:
           pop: 1
         - match: '{{identifiers}}'
           scope: variable.parameter.twig
-        - match: \,
+        - match: ','
           scope: punctuation.separator.sequence.twig
 
 

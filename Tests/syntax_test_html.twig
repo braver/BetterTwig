@@ -602,3 +602,77 @@
 |                                  ^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
 |                                                   ^ punctuation.section.group.end.twig
 |                                                      ^^ punctuation.definition.statement.end.twig
+
+|==============================================================================
+| Other Operators
+| https://twig.symfony.com/doc/3.x/templates.html#other-operators
+|==============================================================================
+
+{% for i in 1..5 %}{{ i }}{% endfor %}
+|  ^^^ keyword.control.loop.for.twig
+|      ^ variable.other.twig
+|        ^^ keyword.control.in.twig
+|           ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|            ^^ keyword.operator.range.twig
+|              ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+
+{{ (1..5)|join(', ') }}
+|  ^^^^^^ meta.group.twig
+|  ^ punctuation.section.group.begin.twig
+|   ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|    ^^ keyword.operator.range.twig
+|      ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|       ^ punctuation.section.group.end.twig
+|        ^^^^^^^^^^^ meta.function.filter.twig
+|        ^ keyword.operator.pipe.twig
+
+{{ "Hello" ~ name ~ "!" }}
+|  ^^^^^^^ meta.string.twig string.quoted.double.twig
+|          ^ keyword.operator.concatenation.twig
+|            ^^^^ variable.other.twig
+|                 ^ keyword.operator.concatenation.twig
+|                   ^^^ meta.string.twig string.quoted.double.twig
+
+{{ foo ? 'yes' : 'no' }}
+|  ^^^ variable.other.twig
+|      ^ keyword.operator.ternary.twig
+|        ^^^^^ meta.string.twig string.quoted.single.twig
+|              ^ keyword.operator.ternary.twig
+|                ^^^^ meta.string.twig string.quoted.single.twig
+
+{{ foo ?: 'no' }} is the same as {{ foo ? foo : 'no' }}
+{{ foo ? 'yes' }} is the same as {{ foo ? 'yes' : '' }}
+
+{# returns the value of foo if it is defined and not null, 'no' otherwise #}
+{{ foo ?? 'no' }}
+|  ^^^ variable.other.twig
+|      ^^ keyword.operator.null-coalescing.twig
+|         ^^^^ meta.string.twig string.quoted.single.twig
+
+{% set numbers = [1, 2, ...moreNumbers] %}
+|              ^ keyword.operator.assignment.twig
+|                ^^^^^^^^^^^^^^^^^^^^^^ meta.sequence.array.twig
+|                 ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                  ^ punctuation.separator.sequence.twig
+|                    ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                     ^ punctuation.separator.sequence.twig
+|                       ^^^ keyword.operator.spread.twig
+|                          ^^^^^^^^^^^ variable.other.twig
+|                                     ^ punctuation.section.sequence.end.twig
+
+{% set ratings = { 'foo': 10, 'bar': 5, ...moreRatings } %}
+|                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.mapping.twig
+|                  ^^^^^ meta.string.twig string.quoted.single.twig
+|                       ^ punctuation.separator.mapping.key-value.twig
+|                         ^^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                           ^ punctuation.separator.mapping.pair.twig
+|                             ^^^^^ meta.string.twig string.quoted.single.twig
+|                             ^ punctuation.definition.string.begin.twig
+|                                 ^ punctuation.definition.string.end.twig
+|                                  ^ punctuation.separator.mapping.key-value.twig
+|                                    ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                                     ^ punctuation.separator.mapping.pair.twig
+|                                       ^^^ keyword.operator.spread.twig
+|                                          ^^^^^^^^^^^ variable.other.twig
+|                                                      ^ punctuation.section.mapping.end.twig
+
