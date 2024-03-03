@@ -547,3 +547,58 @@
 |                                                 ^^ meta.number.integer.decimal.twig constant.numeric.value.twig
 |                                                   ^ punctuation.section.group.end.twig
 |                                                     ^^ punctuation.definition.expression.end.twig
+
+|==============================================================================
+| Test operator
+| https://twig.symfony.com/doc/3.x/templates.html#test-operator
+|==============================================================================
+
+{# find out if a variable is odd #}
+
+{{ name is odd }}
+|^^^^^^^^^^^^^^^^ meta.expression.twig
+|^ punctuation.definition.expression.begin.twig
+|  ^^^^ variable.other.twig
+|       ^^ keyword.operator.comparison.test.twig
+|          ^^^ support.function.test.twig
+|              ^^ punctuation.definition.expression.end.twig
+
+{% if post.status is constant('Post::PUBLISHED') %}
+|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+|^ punctuation.definition.statement.begin.twig
+|  ^^ keyword.control.conditional.if.twig
+|     ^^^^ variable.other.twig
+|         ^ punctuation.accessor.dot.twig
+|          ^^^^^^ meta.property.object.twig
+|                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.test.twig
+|                 ^^ keyword.operator.comparison.test.twig
+|                    ^^^^^^^^ support.function.test.twig
+|                            ^^^^^^^^^^^^^^^^^^^ meta.group.twig meta.function-call.arguments.twig
+|                            ^ punctuation.section.group.begin.twig
+|                             ^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
+|                                              ^ punctuation.section.group.end.twig
+|                                                ^^ punctuation.definition.statement.end.twig
+
+{% if post.status is not constant('Post::PUBLISHED') %}
+|                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.test.twig
+|                 ^^ keyword.operator.comparison.test.twig
+|                    ^^^ keyword.operator.word.logical.twig
+|                        ^^^^^^^^ support.function.test.twig
+|                                ^^^^^^^^^^^^^^^^^^^ meta.group.twig meta.function-call.arguments.twig
+|                                ^ punctuation.section.group.begin.twig
+|                                 ^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
+|                                                  ^ punctuation.section.group.end.twig
+|                                                    ^^ punctuation.definition.statement.end.twig
+
+{# is equivalent to #}
+{% if not (post.status is constant('Post::PUBLISHED')) %}
+|         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.group.twig
+|         ^ punctuation.section.group.begin.twig
+|                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.test.twig
+|                      ^^ keyword.operator.comparison.test.twig
+|                         ^^^^^^^^ support.function.test.twig
+|                                 ^^^^^^^^^^^^^^^^^^^ meta.group.twig meta.function-call.arguments.twig
+|                                 ^ punctuation.section.group.begin.twig
+|                                  ^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
+|                                                   ^ punctuation.section.group.end.twig
+|                                                      ^^ punctuation.definition.statement.end.twig

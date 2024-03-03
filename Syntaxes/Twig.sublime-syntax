@@ -144,7 +144,7 @@ contexts:
     - include: data_structures
     - include: operators
     - include: logical_and_bitwise
-    - include: builtin_tests
+    - include: tests
     - include: functions
     - include: constants
     - include: others
@@ -211,22 +211,42 @@ contexts:
           scope: meta.function-call.identifier.twig variable.function.filter.twig
           # filters with arguments
         - match: (?=\()
-          push: functions_body
+          push: functions_arguments
         - include: immediately_pop
 
-###[ Filters ]###############################################################
+###[ Tests ]###################################################################
+
+  tests:
+    - match: \bis\b
+      scope: keyword.operator.comparison.test.twig
+      push:
+        - meta_scope: meta.function.test.twig
+        - include: block_pop
+          # builtin tests
+        - match: '\bnot\b'
+          scope: keyword.operator.word.logical.twig
+        - match: '\b(constant|defined|divisible\s{1}by|empty|even|odd|iterable|odd|same\s{1}as)\b'
+          scope: support.function.test.twig
+          # push: parameters_else_pop
+          # custom tests
+        - match: '{{identifiers}}'
+          scope: meta.function-call.identifier.twig variable.function.test.twig
+        - match: (?=\()
+          push: functions_arguments
+
+###[ Functions ]###############################################################
 
   functions:
       # builtin functions
     - match: \b(attribute|block|constant|country_names|country_timezones|currency_names|cycle|date|dump|html_classes|include|language_names|locale_names|max|min|parent|random|range|script_names|source|template_from_string|timezone_names)(?=\()
       scope: meta.function-call.identifier.twig support.function.twig
-      push: functions_body
+      push: functions_arguments
       # custom functions
     - match: (\w+)(?=\()
       scope: meta.function-call.identifier.twig variable.function.twig
-      push: functions_body
+      push: functions_arguments
 
-  functions_body:
+  functions_arguments:
     - match: \(
       scope: punctuation.section.group.begin.twig
       push:
@@ -346,7 +366,7 @@ contexts:
         1: keyword.other.twig
 
   logical_and_bitwise:
-    - match: '\b(?:and|or|not|is)\b'
+    - match: '\b(?:and|or|not)\b'
       scope: keyword.operator.word.logical.twig
     - match: '\b(?:b-and|b-or|b-xor)\b'
       scope: keyword.operator.word.bitwise.twig
@@ -402,26 +422,6 @@ contexts:
   meta_import:
     - meta_scope: meta.import.twig
     - include: immediately_pop
-
-  builtin_tests:
-    - match: '\b(constant|defined|divisible\s{1}by|empty|even|odd|iterable|odd|same\s{1}as)\b'
-      scope: support.function.test.twig
-      push: parameters_else_pop
-
-  parameters_else_pop:
-    - match: \(
-      scope: punctuation.section.group.begin.twig
-      set: parameters_body
-    - include: else_pop
-
-  parameters_body:
-    - meta_scope: meta.function-call.arguments.twig
-    - match: \)
-      scope: punctuation.section.group.end.twig
-      pop: 1
-    - include: twig
-    - match: \,
-      scope: punctuation.separator.parameters.twig
 
   get_item:
     - match: (\w+)(\[)
