@@ -106,7 +106,7 @@
 |^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 |  ^^^ keyword.control.loop.for.twig
 |      ^ variable.other.twig
-|        ^^ meta.statement.twig keyword.control.loop.for.in.twig
+|        ^^ meta.statement.twig keyword.control.in.twig
 |           ^^^^^ meta.function-call.identifier.twig
 |           ^^^^^ - meta.function-call.arguments.twig
 |           ^^^^^ support.function.twig
@@ -173,7 +173,7 @@
 |   ^^ punctuation.definition.statement.begin.twig
 |      ^^^ keyword.control.loop.for.twig
 |          ^^^^ variable.other.twig
-|               ^^ keyword.control.loop.for.in.twig
+|               ^^ keyword.control.in.twig
 |                  ^^^^^ variable.other.twig
 |                        ^^ punctuation.definition.statement.end.twig
         <li>{{ user.username|e }}</li>
@@ -469,6 +469,30 @@
 
 {% set sizes = [34, 36, 38, 40, 42] %}
 
+{# https://twig.symfony.com/doc/3.x/templates.html#containment-operator #}
+{{ 1 in [1, 2, 3] }}
+|  ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|    ^^ keyword.control.in.twig
+|       ^^^^^^^^^ meta.sequence.array.twig
+
+{{ 'cd' in 'abcde' }}
+|  ^^^^ meta.string.twig string.quoted.single.twig
+|       ^^ keyword.control.in.twig
+|          ^^^^^^^ meta.string.twig string.quoted.single.twig
+
+{% if 1 not in [1, 2, 3] %}
+|     ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|       ^^^ keyword.operator.word.logical.twig
+|           ^^ keyword.control.in.twig
+|              ^^^^^^^^^ meta.sequence.array.twig
+
+{# is equivalent to #}
+{% if not (1 in [1, 2, 3]) %}
+|  ^^ keyword.control.conditional.if.twig
+|     ^^^ keyword.operator.word.logical.twig
+|         ^^^^^^^^^^^^^^^^ meta.group.twig
+|            ^^ keyword.control.in.twig
+|               ^^^^^^^^^ meta.sequence.array.twig
 
 |==============================================================================
 | Arrow functions

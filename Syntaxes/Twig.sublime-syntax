@@ -309,7 +309,7 @@ contexts:
     - match: \b(break)\b
       scope: keyword.control.flow.break.twig
     - match: \b(in)\b
-      scope: keyword.control.loop.for.in.twig
+      scope: keyword.control.in.twig
     - match: \b((end)?apply)\b
       scope: support.function.apply.twig
     - match: \b((end)?block)\b
