@@ -138,6 +138,7 @@ contexts:
 
   twig:
     - include: block_pop
+    - include: declare_variable
     - include: import_statements
     - include: get_item
     - include: data_structures
@@ -148,9 +149,8 @@ contexts:
     - include: constants
     - include: others
     - include: keywords
-    - include: filter
-    - include: declare_variable
     - include: variables
+    - include: filter
     - include: string
     - include: float
     - include: integer
@@ -165,6 +165,8 @@ contexts:
     - match: \b(_self|_context|_charset)\b
       scope: variable.language.twig
       push: variable_members
+    - match: '{{identifiers}}(?=\s*=>)'
+      scope: variable.parameter.function.twig
     - match: '{{identifiers}}'
       scope: variable.other.twig
       push: variable_members
@@ -181,7 +183,7 @@ contexts:
 ###[ Declaration ]#############################################################
 
   declare_variable:
-    - match: \bset\b
+    - match: \bset\s+(?={{identifiers}})
       scope: keyword.declaration.twig
       push:
         - include: block_pop
@@ -263,6 +265,8 @@ contexts:
       scope: keyword.operator.arithmetic.twig
     - match: '[\+\-\*\/\%]'
       scope: keyword.operator.arithmetic.twig
+    - match: '=>'
+      scope: keyword.declaration.function.arrow.twig
     - match: '='
       scope: keyword.operator.assignment.twig
 
@@ -314,11 +318,14 @@ contexts:
         - match: '{{identifiers}}'
           scope: meta.generic-name.twig
         - include: block_pop
-    # start tags
-    - match: '\b(recursive|macro|extends|include|with|autoescape|pluralize|scoped|as|starts|ends|matches|do|flush|use|only|deprecated|embed|sandbox|cache)\b'
+    - match: \b(starts|ends)\s+with\b
       scope: keyword.other.twig
-    # end tags
-    - match: '\b(endblock|endset|endfor|endmacro|endif|endwith|endautoescape|endembed|endsandbox|endcache)\b'
+    - match: \bhas\s+(every|some)\b
+      scope: keyword.other.twig
+    - match: \bmatches\b
+      scope: keyword.other.twig
+    # tags
+    - match: '\b(end)?(apply|autoescape|block|cache|deprecated|do|embed|extends|flush|for|from|if|import|include|macro|sandbox|set|use|verbatim|with)\b'
       scope: keyword.other.twig
 
   others:
@@ -435,75 +442,92 @@ contexts:
 
   data_structures:
     - include: array
-    - include: tuple_or_group
     - include: dictionary
+    - include: tuple_or_group
 
   array:
     - match: \[
       scope: punctuation.section.sequence.begin.twig
-      push: array_body
-
-  array_body:
-    - meta_scope: meta.sequence.array.twig
-    - match: \]
-      scope: punctuation.section.sequence.end.twig
-      pop: 1
-    - match: ','
-      scope: punctuation.separator.sequence.twig
-    - include: twig
+      push:
+        - meta_scope: meta.sequence.array.twig
+        - match: \]
+          scope: punctuation.section.sequence.end.twig
+          pop: 1
+        - match: ','
+          scope: punctuation.separator.sequence.twig
+        - include: twig
 
   dictionary:
     - match: \{
       scope: punctuation.section.mapping.begin.twig
-      push: dictionary_body
-
-  dictionary_body:
-    - meta_scope: meta.mapping.twig
-    - match: \}
-      scope: punctuation.section.mapping.end.twig
-      pop: 1
-    - match: ':'
-      scope: punctuation.separator.mapping.key-value.twig
-    - match: ','
-      scope: punctuation.separator.mapping.pair.twig
-    - include: twig
+      push:
+        - meta_scope: meta.mapping.twig
+        - match: \}
+          scope: punctuation.section.mapping.end.twig
+          pop: 1
+        - match: ':'
+          scope: punctuation.separator.mapping.key-value.twig
+        - match: ','
+          scope: punctuation.separator.mapping.pair.twig
+        - include: twig
 
   tuple_or_group:
     - match: (?=\()
       branch_point: tuple_or_group
       branch:
         - group
+        - tuple_or_param
+
+  tuple_or_param:
+    - include: immediately_pop
+    - match: (?=\()
+      branch_point: tuple_or_param
+      branch:
         - tuple
+        - parameters
 
   group:
+    - include: else_pop
     - match: \(
       scope: punctuation.section.group.begin.twig
-      push: group_body
-    - include: else_pop
-
-  group_body:
-    - meta_scope: meta.group.twig
-    - match: \)
-      scope: punctuation.section.group.end.twig
-      pop: 1
-    - include: twig
-    - match: \,
-      fail: tuple_or_group
+      push:
+        - meta_scope: meta.group.twig
+        - match: \)
+          scope: punctuation.section.group.end.twig
+          pop: 1
+        - include: twig
+        - match: \,
+          fail: tuple_or_group
 
   tuple:
+    - match: (?==>)  # hold up, looks like an arrow function here
+      fail: tuple_or_param
+    - include: else_pop
     - match: \(
       scope: punctuation.section.sequence.begin.twig
-      push: tuple_body
-    - include: else_pop
+      push:
+        - meta_scope: meta.sequence.tuple.twig
+        - match: \)
+          scope: punctuation.section.sequence.end.twig
+          pop: 1
+        - include: twig
+        - match: \,
+          scope: punctuation.separator.sequence.twig
 
-  tuple_body:
-    - meta_scope: meta.sequence.tuple.twig
-    - match: \)
-      scope: punctuation.section.sequence.end.twig
-      pop: 1
-    - include: twig
-    - match: \,
-      scope: punctuation.separator.sequence.twig
+  parameters:
+    - include: immediately_pop
+    - match: \(
+      scope: punctuation.section.sequence.begin.twig
+      push:
+        - meta_scope: meta.function.parameters.twig
+        - match: \)
+          scope: punctuation.section.sequence.end.twig
+          pop: 1
+        - match: '{{identifiers}}'
+          scope: variable.parameter.twig
+        - match: \,
+          scope: punctuation.separator.sequence.twig
+
 
 ###[ Strings ]#################################################################
 

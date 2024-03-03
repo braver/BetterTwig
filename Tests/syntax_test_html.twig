@@ -449,3 +449,77 @@
 | Comparisons
 | https://twig.symfony.com/doc/3.x/templates.html#comparisons
 |==============================================================================
+
+{% if 'Fabien' starts with 'F' %}
+|     ^^^^^^^^ meta.string.twig string.quoted.single.twig
+|              ^^^^^^^^^^^ keyword.other.twig
+|                          ^^^ meta.string.twig string.quoted.single.twig
+{% endif %}
+
+{% if 'Fabien' ends with 'n' %}
+|              ^^^^^^^^^ keyword.other.twig
+{% endif %}
+
+{% if phone matches '/^[\\d\\.]+$/' %}
+|  ^^ keyword.control.conditional.if.twig
+|     ^^^^^ variable.other.twig
+|           ^^^^^^^ keyword.other.twig
+|                   ^^^^^^^^^^^^^^^ meta.string.twig string.quoted.single.twig
+{% endif %}
+
+{% set sizes = [34, 36, 38, 40, 42] %}
+
+
+|==============================================================================
+| Arrow functions
+| https://twig.symfony.com/doc/3.x/templates.html#comparisons
+| https://twig.symfony.com/doc/3.x/filters/reduce.html
+|==============================================================================
+
+{# arrow function #}
+{% set hasOnlyOver38 = sizes has every v => v > 38 %}
+|  ^^^^ keyword.declaration.twig
+|      ^^^^^^^^^^^^^ meta.declaration.identifier.twig variable.other.twig
+|                    ^ keyword.operator.assignment.twig
+|                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.value.twig
+|                      ^^^^^ variable.other.twig
+|                            ^^^^^^^^^ keyword.other.twig
+|                                      ^ variable.parameter.function.twig
+|                                        ^ - keyword.operator.assignment.twig
+|                                        ^^ keyword.declaration.function.arrow.twig
+|                                           ^ variable.other.twig
+|                                             ^ keyword.operator.comparison.twig
+|                                               ^^ meta.number.integer.decimal.twig constant.numeric.value.twig
+{# hasOnlyOver38 is false #}
+
+{% set hasOver38 = sizes has some v => v > 38 %}
+{# hasOver38 is true #}
+
+{# https://twig.symfony.com/doc/3.x/filters/reduce.html #}
+{{ numbers|reduce((carry, v, k) => carry + v * k, 10) }}
+|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
+|^ punctuation.definition.expression.begin.twig
+|  ^^^^^^^ variable.other.twig
+|         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.filter.twig
+|         ^ keyword.operator.pipe.twig
+|          ^^^^^^ meta.function-call.identifier.twig support.function.filter.twig
+|                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.group.twig meta.function-call.arguments.twig
+|                ^ punctuation.section.group.begin.twig
+|                 ^^^^^^^^^^^^^ meta.function.parameters.twig
+|                 ^ punctuation.section.sequence.begin.twig
+|                  ^^^^^ variable.parameter.twig
+|                       ^ punctuation.separator.sequence.twig
+|                         ^ variable.parameter.twig
+|                          ^ punctuation.separator.sequence.twig
+|                            ^ variable.parameter.twig
+|                             ^ punctuation.section.sequence.end.twig
+|                               ^^ keyword.declaration.function.arrow.twig
+|                                  ^^^^^ variable.other.twig
+|                                        ^ keyword.operator.arithmetic.twig
+|                                          ^ variable.other.twig
+|                                            ^ keyword.operator.arithmetic.twig
+|                                              ^ variable.other.twig
+|                                               ^ punctuation.separator.parameters.twig
+|                                                 ^^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                                                   ^ punctuation.section.group.end.twig
+|                                                     ^^ punctuation.definition.expression.end.twig
