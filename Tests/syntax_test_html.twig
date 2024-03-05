@@ -746,3 +746,22 @@
         <strong>foo bar</strong>
     </div>
 {% endapply %}
+
+|==============================================================================
+| Verbatim
+| https://twig.symfony.com/doc/3.x/tags/verbatim.html
+|==============================================================================
+
+{% verbatim %}
+|^^^^^^^^^^^^^ meta.statement.twig
+|^ punctuation.definition.statement.begin.twig
+|  ^^^^^^^^ keyword.control.twig
+|           ^^ punctuation.definition.statement.end.twig
+    <ul> bla
+|^^^^^^^^^^^ constant.character.twig
+    {% for item in seq %}
+|^^^^^^^^^^^^^^^^^^^^^^^^ constant.character.twig
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+{% endverbatim %}
