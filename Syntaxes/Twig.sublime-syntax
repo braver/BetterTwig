@@ -134,17 +134,19 @@ contexts:
       captures:
         0: meta.statement.twig
         1: punctuation.definition.statement.begin.twig
-        2: keyword.other.twig
+        2: keyword.control.twig
         3: punctuation.definition.statement.end.twig
-      push:
-        - meta_scope: constant.character.twig
-        - match: (\{\%)\s*(\bendverbatim\b)\s*(\%\})
-          captures:
-            0: meta.statement.twig
-            1: punctuation.definition.statement.begin.twig
-            2: keyword.other.twig
-            3: punctuation.definition.statement.end.twig
-          pop: 1
+      push: verbatim_tag_body
+
+  verbatim_tag_body:
+    - meta_content_scope: constant.character.twig
+    - match: (\{\%)\s*(\bendverbatim\b)\s*(\%\})
+      captures:
+        0: meta.statement.twig
+        1: punctuation.definition.statement.begin.twig
+        2: keyword.control.twig
+        3: punctuation.definition.statement.end.twig
+      pop: 1
 
 ###[ The language itself ]#####################################################
 
