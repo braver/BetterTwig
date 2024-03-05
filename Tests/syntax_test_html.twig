@@ -73,11 +73,15 @@
 |                 ^ - meta.function.filter.twig
 
 {% apply upper %}
-|  ^^^^^ support.function.apply.twig
-|        ^^^^^ variable.other.twig
+|  ^^^^^ keyword.control.twig
+|        ^^^^^ support.function.filter.twig
     This text becomes uppercase
 {% endapply %}
-|  ^^^^^^^^ support.function.apply.twig
+|  ^^^^^^^^ keyword.control.twig
+
+{% apply custom %}
+|  ^^^^^ keyword.control.twig
+|        ^^^^^^ variable.function.filter.twig
 
 |==============================================================================
 | Functions
@@ -256,7 +260,7 @@
         {% block head %}
 |       ^^^^^^^^^^^^^^^^ meta.statement.twig
 |       ^^ punctuation.definition.statement.begin.twig
-|          ^^^^^ support.function.block.twig
+|          ^^^^^ keyword.control.twig
 |                ^^^^ meta.generic-name.twig
 |                     ^^ punctuation.definition.statement.end.twig
             <link rel="stylesheet" href="style.css"/>
@@ -285,12 +289,12 @@
 {% block title %}Index{% endblock %}
 |^^^^^^^^^^^^^^^^ meta.statement.twig
 |^ punctuation.definition.statement.begin.twig
-|  ^^^^^ support.function.block.twig
+|  ^^^^^ keyword.control.twig
 |        ^^^^^ meta.generic-name.twig
 |              ^^ punctuation.definition.statement.end.twig
 |                     ^^ punctuation.definition.statement.begin.twig
 |                     ^^^^^^^^^^^^^^ meta.statement.twig
-|                        ^^^^^^^^ support.function.block.twig
+|                        ^^^^^^^^ keyword.control.twig
 |                                 ^^ punctuation.definition.statement.end.twig
 {% block head %}
     {{ parent() }}
@@ -676,3 +680,69 @@
 |                                          ^^^^^^^^^^^ variable.other.twig
 |                                                      ^ punctuation.section.mapping.end.twig
 
+|==============================================================================
+| String Interpolation
+| https://twig.symfony.com/doc/3.x/templates.html#string-interpolation
+|==============================================================================
+
+{{ "foo #{bar} baz" }}
+{{ "foo #{1 + 2} baz" }}
+|  ^^^^^^^^^^^^^^^^^^ meta.string.twig
+|  ^^^^^ string.quoted.double.twig
+|       ^^^^^^^^ - string
+|       ^^^^^^^^ meta.interpolation.twig
+|       ^ punctuation.definition.interpolation.twig
+|        ^ punctuation.section.interpolation.begin.twig
+|         ^^^^^ text.embedded.twig
+|         ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|           ^ keyword.operator.arithmetic.twig
+|             ^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|              ^ punctuation.section.interpolation.end.twig
+|               ^^^^^ string.quoted.double.twig
+|                   ^ punctuation.definition.string.end.twig
+
+|==============================================================================
+| Whitespace Control
+| https://twig.symfony.com/doc/3.x/templates.html#whitespace-control
+|==============================================================================
+
+{% set value = 'no spaces' %}
+{#- No leading/trailing whitespace -#}
+{%- if true -%}
+|^^^^^^^^^^^^^^ meta.statement.twig
+|^^ punctuation.definition.statement.begin.twig
+| ^ punctuation.definition.modifier.twig
+|           ^^^ punctuation.definition.statement.end.twig
+|           ^ punctuation.definition.modifier.twig
+    {{- value -}}
+|   ^^^^^^^^^^^^^ meta.expression.twig
+|   ^^^ punctuation.definition.expression.begin.twig
+|     ^ punctuation.definition.modifier.twig
+|       ^^^^^ variable.other.twig
+|             ^^^ punctuation.definition.expression.end.twig
+|             ^ punctuation.definition.modifier.twig
+{%- endif -%}
+{# output 'no spaces' #}
+
+<li>
+    {{ value }}    </li>
+{# outputs '<li>\n    no spaces    </li>' #}
+
+<li>
+    {{- value }}    </li>
+{# outputs '<li>no spaces    </li>' #}
+
+<li>
+    {{~ value }}    </li>
+|   ^^^^^^^^^^^^ meta.expression.twig
+|   ^^^ punctuation.definition.expression.begin.twig
+|     ^ punctuation.definition.modifier.twig
+|       ^^^^^ variable.other.twig
+|             ^^ punctuation.definition.expression.end.twig
+{# outputs '<li>\nno spaces    </li>' #}
+
+{% apply spaceless %}
+    <div>
+        <strong>foo bar</strong>
+    </div>
+{% endapply %}

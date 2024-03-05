@@ -437,8 +437,8 @@
 ##                   ^^ punctuation.definition.statement.end.twig
 ##                      ^^ punctuation.definition.statement.begin.twig
 ##                                  ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ support.function
-##                         ^^^^^^^^ support.function
+##     ^^^^^ keyword.control
+##                         ^^^^^^^^ keyword.control
 
     {% autoescape "html" %} {% endautoescape %}
 ##  ^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
@@ -458,8 +458,8 @@
 ##                 ^^ punctuation.definition.statement.end.twig
 ##                    ^^ punctuation.definition.statement.begin.twig
 ##                                ^^ punctuation.definition.statement.end.twig
-##     ^^^^^ support.function
-##                       ^^^^^^^^ support.function
+##     ^^^^^ keyword.control
+##                       ^^^^^^^^ keyword.control
 
     {% verbatim %} {% endverbatim %}
 ##  ^^^^^^^^^^^^^^ meta.statement.twig
@@ -520,15 +520,15 @@
 ##                  ^ keyword.operator.assignment.twig
 ##                    ^^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
 
-    {% set %} {% endset %}
+    {% set foo %} {% endset %}
 ##  ^^^^^^^^^ meta.statement.twig
-##            ^^^^^^^^^^^^ meta.statement.twig
+##                ^^^^^^^^^^^^ meta.statement.twig
 ##  ^^ punctuation.definition.statement.begin.twig
-##         ^^ punctuation.definition.statement.end.twig
-##            ^^ punctuation.definition.statement.begin.twig
-##                      ^^ punctuation.definition.statement.end.twig
-##     ^^^ keyword.other.twig
-##               ^^^^^^ keyword.other.twig
+##             ^^ punctuation.definition.statement.end.twig
+##                ^^ punctuation.definition.statement.begin.twig
+##                          ^^ punctuation.definition.statement.end.twig
+##     ^^^ keyword.declaration.twig
+##                   ^^^^^^ keyword.other.twig
 
     {% extends "template.twig" %}
 ##  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
