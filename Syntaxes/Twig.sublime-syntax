@@ -162,6 +162,7 @@ contexts:
     - include: functions
     - include: constants
     - include: others
+    - include: tags
     - include: keywords
     - include: variables
     - include: filter
@@ -341,9 +342,9 @@ contexts:
         0: constant.numeric.value.twig
         1: punctuation.separator.decimal.twig
 
-###[ Keywords ]################################################################
+###[ Tags ]################################################################
 
-  keywords:
+  tags:
     - match: \b((end)?if)\b
       scope: keyword.control.conditional.if.twig
     - match: \b(else)\b
@@ -352,14 +353,6 @@ contexts:
       scope: keyword.control.conditional.elseif.twig
     - match: \b((end)?for)\b
       scope: keyword.control.loop.for.twig
-    - match: \b(in)\b
-      scope: keyword.control.in.twig
-    - match: \b(starts|ends)\s+with\b
-      scope: keyword.other.twig
-    - match: \bhas\s+(every|some)\b
-      scope: keyword.other.twig
-    - match: \bmatches\b
-      scope: keyword.other.twig
     # for set: see declaration
     - match: \bendset\b
       scope: keyword.other.twig
@@ -389,6 +382,18 @@ contexts:
     - match: '{{identifiers}}'
       scope: variable.function.filter.twig
     - include: block_pop
+
+###[ Keywords ]################################################################
+
+  keywords:
+    - match: \b(in)\b
+      scope: keyword.control.in.twig
+    - match: \b(starts|ends)\s+with\b
+      scope: keyword.other.twig
+    - match: \bhas\s+(every|some)\b
+      scope: keyword.other.twig
+    - match: \bmatches\b
+      scope: keyword.other.twig
 
   others:
     - match: (\bignore\b)\s{1}(?=\bmissing\b)
