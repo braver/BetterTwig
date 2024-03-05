@@ -352,10 +352,6 @@ contexts:
       scope: keyword.control.conditional.elseif.twig
     - match: \b((end)?for)\b
       scope: keyword.control.loop.for.twig
-    - match: \b(continue)\b
-      scope: keyword.control.flow.continue.twig
-    - match: \b(break)\b
-      scope: keyword.control.flow.break.twig
     - match: \b(in)\b
       scope: keyword.control.in.twig
     - match: \b(starts|ends)\s+with\b
