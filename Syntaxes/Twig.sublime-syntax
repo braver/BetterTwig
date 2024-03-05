@@ -41,11 +41,13 @@ contexts:
   comment:
     - match: \{\#
       scope: punctuation.definition.comment.begin.twig
-      push:
-        - meta_scope: comment.block.twig
-        - match: \#\}
-          scope: punctuation.definition.comment.end.twig
-          pop: 1
+      push: comment_body
+
+  comment_body:
+    - meta_scope: comment.block.twig
+    - match: \#\}
+      scope: punctuation.definition.comment.end.twig
+      pop: 1
 
 ###[ Embedded ]################################################################
 
@@ -66,19 +68,23 @@ contexts:
       captures:
         0: punctuation.definition.statement.begin.twig
         1: punctuation.definition.modifier.twig
-      push:
-        - meta_scope: meta.statement.twig
-        - include: statement_body
+      push: statement_block_meta
+
+  statement_block_meta:
+    - meta_scope: meta.statement.twig
+    - include: statement_body
 
   statement_block_embedded_in_string:
     - match: '\{\%({{modifiers}})?'
       captures:
         0: punctuation.definition.statement.begin.twig
         1: punctuation.definition.modifier.twig
-      push:
-        - meta_scope: meta.statement.twig
-        - clear_scopes: 1
-        - include: statement_body
+      push: statement_block_meta_in_strings
+
+  statement_block_meta_in_strings:
+    - meta_scope: meta.statement.twig
+    - clear_scopes: 1
+    - include: statement_body
 
   statement_body:
     - match: '{{statement_end}}'
@@ -95,19 +101,23 @@ contexts:
       captures:
         0: punctuation.definition.expression.begin.twig
         1: punctuation.definition.modifier.twig
-      push:
-        - meta_scope: meta.expression.twig
-        - include: expression_body
+      push: expression_block_meta
+
+  expression_block_meta:
+    - meta_scope: meta.expression.twig
+    - include: expression_body
 
   expression_block_embedded_in_string:
     - match: '\{{2}({{modifiers}})?'
       captures:
         0: punctuation.definition.expression.begin.twig
         1: punctuation.definition.modifier.twig
-      push:
-        - meta_scope: meta.expression.twig
-        - clear_scopes: 1
-        - include: expression_body
+      push: expression_block_meta_in_strings
+
+  expression_block_meta_in_strings:
+    - meta_scope: meta.expression.twig
+    - clear_scopes: 1
+    - include: expression_body
 
   expression_body:
     - match: '{{expression_end}}'
@@ -176,10 +186,12 @@ contexts:
   variable_members:
     - match: \.
       scope: punctuation.accessor.dot.twig
-      push:
-        - match: '{{identifiers}}'
-          scope: meta.property.object.twig
-        - include: immediately_pop
+      push: variable_member_name
+    - include: immediately_pop
+
+  variable_member_name:
+    - match: '{{identifiers}}'
+      scope: meta.property.object.twig
     - include: immediately_pop
 
 ###[ Declaration ]#############################################################
@@ -187,54 +199,62 @@ contexts:
   declare_variable:
     - match: \bset\s+(?={{identifiers}})
       scope: keyword.declaration.twig
-      push:
-        - include: block_pop
-        - match: '{{identifiers}}(?=\s*\=)'
-          scope: meta.declaration.identifier.twig variable.other.twig
-        - match: '='
-          scope: keyword.operator.assignment.twig
-          push:
-            - meta_content_scope: meta.declaration.value.twig
-            - include: twig
-            - include: block_pop
+      push: declare_variable_name
+
+  declare_variable_name:
+    - include: block_pop
+    - match: '{{identifiers}}(?=\s*\=)'
+      scope: meta.declaration.identifier.twig variable.other.twig
+    - match: '='
+      scope: keyword.operator.assignment.twig
+      push: declare_variable_value
+
+  declare_variable_value:
+    - meta_content_scope: meta.declaration.value.twig
+    - include: twig
+    - include: block_pop
 
 ###[ Filters ]#################################################################
 
   filter:
     - match: \|
       scope: keyword.operator.pipe.twig
-      push:
-        - meta_scope: meta.function.filter.twig
-          # builtin filters
-        - match: '{{builtin_filters}}'
-          scope: meta.function-call.identifier.twig support.function.filter.twig
-          # custom filters
-        - match: '{{identifiers}}'
-          scope: meta.function-call.identifier.twig variable.function.filter.twig
-          # filters with arguments
-        - match: (?=\()
-          push: functions_arguments
-        - include: immediately_pop
+      push: filter_body
+
+  filter_body:
+    - meta_scope: meta.function.filter.twig
+      # builtin filters
+    - match: '{{builtin_filters}}'
+      scope: meta.function-call.identifier.twig support.function.filter.twig
+      # custom filters
+    - match: '{{identifiers}}'
+      scope: meta.function-call.identifier.twig variable.function.filter.twig
+      # filters with arguments
+    - match: (?=\()
+      push: functions_arguments
+    - include: immediately_pop
 
 ###[ Tests ]###################################################################
 
   tests:
     - match: \bis\b
       scope: keyword.operator.comparison.test.twig
-      push:
-        - meta_scope: meta.function.test.twig
-        - include: block_pop
-          # builtin tests
-        - match: '\bnot\b'
-          scope: keyword.operator.word.logical.twig
-        - match: '\b(constant|defined|divisible\s{1}by|empty|even|odd|iterable|odd|same\s{1}as)\b'
-          scope: support.function.test.twig
-          # push: parameters_else_pop
-          # custom tests
-        - match: '{{identifiers}}'
-          scope: meta.function-call.identifier.twig variable.function.test.twig
-        - match: (?=\()
-          push: functions_arguments
+      push: tests_body
+
+  tests_body:
+    - meta_scope: meta.function.test.twig
+    - include: block_pop
+      # builtin tests
+    - match: '\bnot\b'
+      scope: keyword.operator.word.logical.twig
+    - match: '\b(constant|defined|divisible\s{1}by|empty|even|odd|iterable|odd|same\s{1}as)\b'
+      scope: support.function.test.twig
+      # push: parameters_else_pop
+      # custom tests
+    - match: '{{identifiers}}'
+      scope: meta.function-call.identifier.twig variable.function.test.twig
+    - match: (?=\()
+      push: functions_arguments
 
 ###[ Functions ]###############################################################
 
@@ -251,18 +271,20 @@ contexts:
   functions_arguments:
     - match: \(
       scope: punctuation.section.group.begin.twig
-      push:
-        - meta_scope: meta.group.twig meta.function-call.arguments.twig
-        - match: \)
-          scope: punctuation.section.group.end.twig
-          pop: 2
-        - match: \,
-          scope: punctuation.separator.parameters.twig
-        - match: '({{identifiers}})\s*(=)'
-          captures:
-            1: variable.parameter.twig
-            2: keyword.operator.assignment.twig
-        - include: twig
+      push: functions_arguments_body
+
+  functions_arguments_body:
+    - meta_scope: meta.group.twig meta.function-call.arguments.twig
+    - match: \)
+      scope: punctuation.section.group.end.twig
+      pop: 2
+    - match: \,
+      scope: punctuation.separator.parameters.twig
+    - match: '({{identifiers}})\s*(=)'
+      captures:
+        1: variable.parameter.twig
+        2: keyword.operator.assignment.twig
+    - include: twig
 
 ###[ Operators ]###############################################################
 
@@ -345,22 +367,30 @@ contexts:
       scope: keyword.other.twig
     - match: '\b(end)?(autoescape|cache|deprecated|do|embed|extends|flush|from|if|import|include|macro|sandbox|use|verbatim|with)\b'
       scope: keyword.other.twig
-    # apply
-    - match: \b((end)?apply)\b
-      scope: keyword.control.twig
-      push:
-        - match: '{{builtin_filters}}'
-          scope: support.function.filter.twig
-        - match: '{{identifiers}}'
-          scope: variable.function.filter.twig
-        - include: block_pop
-    # block
+    - include: apply_tag
+    - include: block_tag
+
+  block_tag:
     - match: \b((end)?block)\b
       scope: keyword.control.twig
-      push:
-        - match: '{{identifiers}}'
-          scope: meta.generic-name.twig
-        - include: block_pop
+      push: block_body
+
+  block_body:
+    - match: '{{identifiers}}'
+      scope: meta.generic-name.twig
+    - include: block_pop
+
+  apply_tag:
+    - match: \b((end)?apply)\b
+      scope: keyword.control.twig
+      push: apply_body
+
+  apply_body:
+    - match: '{{builtin_filters}}'
+      scope: support.function.filter.twig
+    - match: '{{identifiers}}'
+      scope: variable.function.filter.twig
+    - include: block_pop
 
   others:
     - match: (\bignore\b)\s{1}(?=\bmissing\b)
@@ -388,12 +418,14 @@ contexts:
   ternary_operator:
     - match: '\?'
       scope: keyword.operator.ternary.twig
-      push:
-        - match: ':'
-          scope: keyword.operator.ternary.twig
-          pop: 1
-        - include: twig
-        - include: else_pop
+      push: ternary_operator_body
+
+  ternary_operator_body:
+    - match: ':'
+      scope: keyword.operator.ternary.twig
+      pop: 1
+    - include: twig
+    - include: else_pop
 
   import_statements:
     - match: \b(import)\b
@@ -462,28 +494,32 @@ contexts:
   array:
     - match: \[
       scope: punctuation.section.sequence.begin.twig
-      push:
-        - meta_scope: meta.sequence.array.twig
-        - match: \]
-          scope: punctuation.section.sequence.end.twig
-          pop: 1
-        - match: ','
-          scope: punctuation.separator.sequence.twig
-        - include: twig
+      push: array_body
+
+  array_body:
+    - meta_scope: meta.sequence.array.twig
+    - match: \]
+      scope: punctuation.section.sequence.end.twig
+      pop: 1
+    - match: ','
+      scope: punctuation.separator.sequence.twig
+    - include: twig
 
   dictionary:
     - match: \{
       scope: punctuation.section.mapping.begin.twig
-      push:
-        - meta_scope: meta.mapping.twig
-        - match: \}
-          scope: punctuation.section.mapping.end.twig
-          pop: 1
-        - match: ':'
-          scope: punctuation.separator.mapping.key-value.twig
-        - match: ','
-          scope: punctuation.separator.mapping.pair.twig
-        - include: twig
+      push: dictionary_body
+
+  dictionary_body:
+    - meta_scope: meta.mapping.twig
+    - match: \}
+      scope: punctuation.section.mapping.end.twig
+      pop: 1
+    - match: ':'
+      scope: punctuation.separator.mapping.key-value.twig
+    - match: ','
+      scope: punctuation.separator.mapping.pair.twig
+    - include: twig
 
   tuple_or_group:
     - match: (?=\()
@@ -504,14 +540,16 @@ contexts:
     - include: else_pop
     - match: \(
       scope: punctuation.section.group.begin.twig
-      push:
-        - meta_scope: meta.group.twig
-        - match: \)
-          scope: punctuation.section.group.end.twig
-          pop: 1
-        - include: twig
-        - match: \,
-          fail: tuple_or_group
+      push: group_body
+
+  group_body:
+    - meta_scope: meta.group.twig
+    - match: \)
+      scope: punctuation.section.group.end.twig
+      pop: 1
+    - include: twig
+    - match: \,
+      fail: tuple_or_group
 
   tuple:
     - match: (?==>)  # hold up, looks like an arrow function here
@@ -519,28 +557,32 @@ contexts:
     - include: else_pop
     - match: \(
       scope: punctuation.section.sequence.begin.twig
-      push:
-        - meta_scope: meta.sequence.tuple.twig
-        - match: \)
-          scope: punctuation.section.sequence.end.twig
-          pop: 1
-        - include: twig
-        - match: ','
-          scope: punctuation.separator.sequence.twig
+      push: tuple_body
+
+  tuple_body:
+    - meta_scope: meta.sequence.tuple.twig
+    - match: \)
+      scope: punctuation.section.sequence.end.twig
+      pop: 1
+    - include: twig
+    - match: ','
+      scope: punctuation.separator.sequence.twig
 
   parameters:
     - include: immediately_pop
     - match: \(
       scope: punctuation.section.sequence.begin.twig
-      push:
-        - meta_scope: meta.function.parameters.twig
-        - match: \)
-          scope: punctuation.section.sequence.end.twig
-          pop: 1
-        - match: '{{identifiers}}'
-          scope: variable.parameter.twig
-        - match: ','
-          scope: punctuation.separator.sequence.twig
+      push: parameters_body
+
+  parameters_body:
+    - meta_scope: meta.function.parameters.twig
+    - match: \)
+      scope: punctuation.section.sequence.end.twig
+      pop: 1
+    - match: '{{identifiers}}'
+      scope: variable.parameter.twig
+    - match: ','
+      scope: punctuation.separator.sequence.twig
 
 
 ###[ Strings ]#################################################################
@@ -585,14 +627,16 @@ contexts:
       captures:
         1: punctuation.definition.interpolation.twig
         2: punctuation.section.interpolation.begin.twig
-      push:
-        - clear_scopes: 1
-        - meta_content_scope: text.embedded.twig
-        - meta_scope: meta.interpolation.twig
-        - match: \}
-          scope: punctuation.section.interpolation.end.twig
-          pop: 1
-        - include: twig
+      push: string_interpolation_body
+
+  string_interpolation_body:
+    - clear_scopes: 1
+    - meta_content_scope: text.embedded.twig
+    - meta_scope: meta.interpolation.twig
+    - match: \}
+      scope: punctuation.section.interpolation.end.twig
+      pop: 1
+    - include: twig
 
   printf_placeholder:
     - match: \%[s]
