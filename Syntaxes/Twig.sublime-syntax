@@ -442,6 +442,8 @@ contexts:
       scope: keyword.other.twig
     - match: \bmatches\b
       scope: keyword.other.twig
+    - match: \bonly\b
+      scope: keyword.other.twig
 
   others:
     - match: (\bignore\b)\s{1}(?=\bmissing\b)

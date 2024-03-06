@@ -864,3 +864,23 @@
 |                         ^^^^^^^ variable.other.twig
 |                                 ^^ keyword.other.twig
 |                                    ^^^^^^^^^^^^^^ variable.other.twig
+
+|==============================================================================
+| With
+| https://twig.symfony.com/doc/3.x/tags/with.html
+|==============================================================================
+
+{% with { foo: 42 } only %}
+|^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+|  ^^^^ keyword.other.twig
+|       ^^^^^^^^^^^ meta.mapping.twig
+|       ^ punctuation.section.mapping.begin.twig
+|         ^^^ variable.other.twig
+|            ^ punctuation.separator.mapping.key-value.twig
+|              ^^ meta.number.integer.decimal.twig constant.numeric.value.twig
+|                 ^ punctuation.section.mapping.end.twig
+|                   ^^^^ keyword.other.twig
+|                        ^^ punctuation.definition.statement.end.twig
+    {# only foo is defined #}
+    {# bar is not defined #}
+{% endwith %}
