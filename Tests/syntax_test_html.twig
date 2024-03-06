@@ -822,3 +822,45 @@
         <li>{{ user.username|e }}</li>
     {% endfor %}
 </ul>
+
+|==============================================================================
+| Extends, Use
+| https://twig.symfony.com/doc/3.x/tags/extends.html
+| https://twig.symfony.com/doc/3.x/tags/use.html
+|==============================================================================
+
+{# https://twig.symfony.com/doc/3.x/tags/extends.html#block-shortcuts #}
+{% block title page_title|title %}
+|                        ^^^^^^ meta.function.filter.twig
+
+{# https://twig.symfony.com/doc/3.x/tags/extends.html#dynamic-inheritance #}
+{% extends ['layout.html', 'base_layout.html'] %}
+|          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.sequence.array.twig
+
+{# https://twig.symfony.com/doc/3.x/tags/extends.html#conditional-inheritance #}
+{% extends standalone ? "minimum.html" : "base.html" %}
+|                     ^ keyword.operator.ternary.twig
+|                       ^^^^^^^^^^^^^^ meta.string.twig
+|                                      ^ keyword.operator.ternary.twig
+|                                        ^^^^^^^^^^^ meta.string.twig
+
+{# https://twig.symfony.com/doc/3.x/tags/use.html #}
+{% use "blocks.html" with sidebar as base_sidebar, title as base_title %}
+|  ^^^ keyword.control.twig
+|      ^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
+|                    ^^^^ keyword.other.twig
+|                         ^^^^^^^ variable.other.twig
+|                                 ^^ keyword.other.twig
+|                                    ^^^^^^^^^^^^ variable.other.twig
+|                                                ^ punctuation.separator.sequence.twig
+|                                                  ^^^^^ variable.other.twig
+|                                                        ^^ keyword.other.twig
+|                                                           ^^^^^^^^^^ variable.other.twig
+
+{% use "blocks.html" with sidebar as parent_sidebar %}
+|  ^^^ keyword.control.twig
+|      ^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
+|                    ^^^^ keyword.other.twig
+|                         ^^^^^^^ variable.other.twig
+|                                 ^^ keyword.other.twig
+|                                    ^^^^^^^^^^^^^^ variable.other.twig

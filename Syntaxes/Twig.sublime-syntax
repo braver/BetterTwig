@@ -368,21 +368,12 @@ contexts:
     # for set: see declaration
     - match: \bendset\b
       scope: keyword.other.twig
-    - match: '\b(end)?(autoescape|cache|deprecated|do|embed|extends|flush|from|if|import|include|macro|sandbox|use|verbatim|with)\b'
+    - match: '\b(end)?(autoescape|cache|deprecated|do|embed|extends|flush|from|if|import|include|macro|sandbox|with)\b'
       scope: keyword.other.twig
     - include: apply_tag
     - include: block_tag
     - include: for_tag
-
-  block_tag:
-    - match: \b((end)?block)\b
-      scope: keyword.control.twig
-      push: block_body
-
-  block_body:
-    - match: '{{identifiers}}'
-      scope: meta.generic-name.twig
-    - include: block_pop
+    - include: use_tag
 
   apply_tag:
     - match: \b((end)?apply)\b
@@ -394,6 +385,17 @@ contexts:
       scope: support.function.filter.twig
     - match: '{{identifiers}}'
       scope: variable.function.filter.twig
+    - include: block_pop
+
+  block_tag:
+    - match: \b((end)?block)\b
+      scope: keyword.control.twig
+      push: block_body
+
+  block_body:
+    - match: '{{identifiers}}'
+      scope: meta.generic-name.twig
+    - include: twig
     - include: block_pop
 
   for_tag:
@@ -414,6 +416,19 @@ contexts:
   for_body_iterable:
     - include: block_pop
     - include: twig
+
+  use_tag:
+    - match: \b((end)?use)\b
+      scope: keyword.control.twig
+      push: use_body
+
+  use_body:
+    - match: \b(with|as)\b
+      scope: keyword.other.twig
+    - match: \,
+      scope: punctuation.separator.sequence.twig
+    - include: twig
+    - include: block_pop
 
 
 ###[ Keywords ]################################################################
