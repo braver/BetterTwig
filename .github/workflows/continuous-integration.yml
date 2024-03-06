@@ -29,6 +29,8 @@ jobs:
           include:
             - build: 4170
               packages: v4170
+            - build: 4173
+              packages: v4173
       steps:
         - uses: actions/checkout@v4
         - uses: SublimeText/syntax-test-action@v2
