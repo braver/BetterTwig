@@ -180,11 +180,25 @@ contexts:
     - match: \b(_self|_context|_charset)\b
       scope: variable.language.twig
       push: variable_members
+    - match: \b(loop)\b
+      scope: variable.language.twig
+      push: loop_members
     - match: '{{identifiers}}(?=\s*=>)'
       scope: variable.parameter.function.twig
     - match: '{{identifiers}}'
       scope: variable.other.twig
       push: variable_members
+
+  loop_members:
+    - match: \.
+      scope: punctuation.accessor.dot.twig
+      push: loop_member_name
+    - include: immediately_pop
+
+  loop_member_name:
+    - match: '\b(index|index0|revindex|revindex0|first|last|length|parent)\b'
+      scope: meta.property.object.twig variable.other.twig
+    - include: variable_member_name
 
   variable_members:
     - match: \.
@@ -351,8 +365,6 @@ contexts:
       scope: keyword.control.conditional.else.twig
     - match: \b(elseif)\b
       scope: keyword.control.conditional.elseif.twig
-    - match: \b((end)?for)\b
-      scope: keyword.control.loop.for.twig
     # for set: see declaration
     - match: \bendset\b
       scope: keyword.other.twig
@@ -360,6 +372,7 @@ contexts:
       scope: keyword.other.twig
     - include: apply_tag
     - include: block_tag
+    - include: for_tag
 
   block_tag:
     - match: \b((end)?block)\b
@@ -382,6 +395,26 @@ contexts:
     - match: '{{identifiers}}'
       scope: variable.function.filter.twig
     - include: block_pop
+
+  for_tag:
+    - match: \b((end)?for)\b
+      scope: keyword.control.loop.for.twig
+      push: for_body
+
+  for_body:
+    - meta_scope: meta.statement.loop.for.twig
+    - match: \b(in)\b
+      scope: keyword.control.loop.for.in.twig
+      push: for_body_iterable
+    - match: \,
+      scope: punctuation.separator.sequence.twig
+    - include: variables
+    - include: block_pop
+
+  for_body_iterable:
+    - include: block_pop
+    - include: twig
+
 
 ###[ Keywords ]################################################################
 

@@ -110,7 +110,7 @@
 |^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 |  ^^^ keyword.control.loop.for.twig
 |      ^ variable.other.twig
-|        ^^ meta.statement.twig keyword.control.in.twig
+|        ^^ meta.statement.twig keyword.control.loop.for.in.twig
 |           ^^^^^ meta.function-call.identifier.twig
 |           ^^^^^ - meta.function-call.arguments.twig
 |           ^^^^^ support.function.twig
@@ -177,7 +177,7 @@
 |   ^^ punctuation.definition.statement.begin.twig
 |      ^^^ keyword.control.loop.for.twig
 |          ^^^^ variable.other.twig
-|               ^^ keyword.control.in.twig
+|               ^^ keyword.control.loop.for.in.twig
 |                  ^^^^^ variable.other.twig
 |                        ^^ punctuation.definition.statement.end.twig
         <li>{{ user.username|e }}</li>
@@ -615,7 +615,7 @@
 {% for i in 1..5 %}{{ i }}{% endfor %}
 |  ^^^ keyword.control.loop.for.twig
 |      ^ variable.other.twig
-|        ^^ keyword.control.in.twig
+|        ^^ keyword.control.loop.for.in.twig
 |           ^ meta.number.integer.decimal.twig constant.numeric.value.twig
 |            ^^ keyword.operator.range.twig
 |              ^ meta.number.integer.decimal.twig constant.numeric.value.twig
@@ -765,3 +765,60 @@
     {% endfor %}
     </ul>
 {% endverbatim %}
+
+|==============================================================================
+| For loops
+| https://twig.symfony.com/doc/3.x/tags/for.html
+|==============================================================================
+
+{# https://twig.symfony.com/doc/3.x/tags/for.html#the-loop-variable #}
+{% for user in users %}
+    {{ loop.index }} - {{ user.username }}
+|      ^^^^ variable.language.twig
+|          ^ punctuation.accessor.dot.twig
+|           ^^^^^ variable.other.twig
+|                         ^^^^ variable.other.twig
+|                              ^^^^^^^^ - variable.other.twig
+{% endfor %}
+
+{# https://twig.symfony.com/doc/3.x/tags/for.html#iterating-over-keys #}
+<ul>
+    {% for key in users|keys %}
+|      ^^^^^^^^^^^^^^^^^^^^^^ meta.statement.loop.for.twig
+|      ^^^ keyword.control.loop.for.twig
+|          ^^^ variable.other.twig
+|              ^^ keyword.control.loop.for.in.twig
+|                 ^^^^^ variable.other.twig
+|                      ^^^^^ meta.function.filter.twig
+|                      ^ keyword.operator.pipe.twig
+|                       ^^^^ meta.function-call.identifier.twig support.function.filter.twig
+        <li>{{ key }}</li>
+    {% endfor %}
+</ul>
+
+{# https://twig.symfony.com/doc/3.x/tags/for.html#iterating-over-keys-and-values #}
+{% for key, user in users %}
+|  ^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.loop.for.twig
+|  ^^^ keyword.control.loop.for.twig
+|      ^^^ variable.other.twig
+|         ^ punctuation.separator.sequence.twig
+|           ^^^^ variable.other.twig
+|                ^^ keyword.control.loop.for.in.twig
+|                   ^^^^^ variable.other.twig
+|                         ^^ punctuation.definition.statement.end.twig
+    <li>{{ key }}: {{ user.username|e }}</li>
+{% endfor %}
+
+{# https://twig.symfony.com/doc/3.x/tags/for.html#iterating-over-a-subset #}
+<ul>
+    {% for user in users|slice(0, 10) %}
+|      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.loop.for.twig
+|      ^^^ keyword.control.loop.for.twig
+|          ^^^^ variable.other.twig
+|               ^^ keyword.control.loop.for.in.twig
+|                  ^^^^^ variable.other.twig
+|                       ^^^^^^^^^^^^^ meta.function.filter.twig
+|                             ^^^^^^^ meta.group.twig meta.function-call.arguments.twig
+        <li>{{ user.username|e }}</li>
+    {% endfor %}
+</ul>
