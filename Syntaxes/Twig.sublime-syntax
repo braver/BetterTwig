@@ -381,6 +381,7 @@ contexts:
       push: apply_body
 
   apply_body:
+    - meta_scope: meta.statement.apply.twig
     - match: '{{builtin_filters}}'
       scope: support.function.filter.twig
     - match: '{{identifiers}}'
@@ -393,6 +394,7 @@ contexts:
       push: block_body
 
   block_body:
+    - meta_scope: meta.statement.block.twig
     - match: '{{identifiers}}'
       scope: meta.generic-name.twig
     - include: twig

@@ -1,5 +1,5 @@
 {
-    "scope": "meta.function.filter.twig",
+    "scope": "meta.function.filter.twig, meta.statement.apply.twig",
     "completions": [
         {
             "trigger": "abs",
