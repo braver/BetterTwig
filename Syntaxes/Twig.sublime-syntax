@@ -56,11 +56,6 @@ contexts:
     - include: statement_block
     - include: expression_block
 
-  twig_embedded_in_string:
-    - include: verbatim_tag
-    - include: statement_block_embedded_in_string
-    - include: expression_block_embedded_in_string
-
 ###[ Statements {% ]###########################################################
 
   statement_block:
@@ -72,18 +67,7 @@ contexts:
 
   statement_block_meta:
     - meta_scope: meta.statement.twig
-    - include: statement_body
-
-  statement_block_embedded_in_string:
-    - match: '\{\%({{modifiers}})?'
-      captures:
-        0: punctuation.definition.statement.begin.twig
-        1: punctuation.definition.modifier.twig
-      push: statement_block_meta_in_strings
-
-  statement_block_meta_in_strings:
-    - meta_scope: meta.statement.twig
-    - clear_scopes: 1
+    - clear_scopes: true
     - include: statement_body
 
   statement_body:
@@ -105,18 +89,7 @@ contexts:
 
   expression_block_meta:
     - meta_scope: meta.expression.twig
-    - include: expression_body
-
-  expression_block_embedded_in_string:
-    - match: '\{{2}({{modifiers}})?'
-      captures:
-        0: punctuation.definition.expression.begin.twig
-        1: punctuation.definition.modifier.twig
-      push: expression_block_meta_in_strings
-
-  expression_block_meta_in_strings:
-    - meta_scope: meta.expression.twig
-    - clear_scopes: 1
+    - clear_scopes: true
     - include: expression_body
 
   expression_body:

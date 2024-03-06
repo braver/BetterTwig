@@ -6,7 +6,7 @@
 |==============================================================================
 
 {{ foo.bar }}
-|^^^^^^^^^^^^ text.html.twig meta.expression.twig
+|^^^^^^^^^^^^ meta.expression.twig
 |^ punctuation.definition.expression.begin.twig
 |<- punctuation.definition.expression.begin.twig
 |          ^^ punctuation.definition.expression.end.twig
@@ -885,3 +885,42 @@
     {# only foo is defined #}
     {# bar is not defined #}
 {% endwith %}
+
+|==============================================================================
+| Inside HTML, CSS, JS
+|==============================================================================
+
+<div data-{{ custom_attr }} class="class {{ var|convert_encoding }}"></div>
+|         ^^^^^^^^^^^^^^^^^ - entity.other.attribute-name.html
+|         ^^^^^^^^^^^^^^^^^ meta.expression.twig
+|                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.expression.twig
+|                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ - meta.string
+
+<style type="text/css">
+    div {
+        color: {{ blue|escape }} {# a comment #};
+|              ^^^^^^^^^^^^^^^^^ meta.expression.twig
+|              ^^^^^^^^^^^^^^^^^ - meta.property-list.css
+|              ^^^^^^^^^^^^^^^^^ - meta.property-value.css
+|                                ^^^^^^^^^^^^^^^ comment.block.twig
+        {% block style %}{% endblock %}
+|       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
+    }
+</style>
+
+<script type="text/javascript">
+    var foo = function({{ arg|escape }}) {
+|                      ^^^^^^^^^^^^^^^^ meta.expression.twig
+|                      ^^^^^^^^^^^^^^^^ - meta.function.parameters.js
+        return;
+    }
+
+    {# a comment #}
+|   ^^^^^^^^^^^^^^^ comment.block.twig
+
+    let obj = {
+        foo: "{{ bar }}"
+|             ^^^^^^^^^ meta.expression.twig
+|             ^^^^^^^^^ - string.quoted.double.js
+    }
+</script>
