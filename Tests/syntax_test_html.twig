@@ -854,6 +854,10 @@
 |                                      ^ keyword.operator.ternary.twig
 |                                        ^^^^^^^^^^^ meta.string.twig
 
+{# https://github.com/Sublime-Instincts/BetterTwig/issues/12 #}
+{% extends "/_skeleton.html" %}
+|          ^^^^^^^^^^^^^^^^^ meta.string.twig string.quoted.double.twig
+
 {# https://twig.symfony.com/doc/3.x/tags/use.html #}
 {% use "blocks.html" with sidebar as base_sidebar, title as base_title %}
 |  ^^^ keyword.control.twig
