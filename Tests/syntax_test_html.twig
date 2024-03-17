@@ -80,9 +80,13 @@
 {% endapply %}
 |  ^^^^^^^^ keyword.control.twig
 
+{# Custom filters #}
 {% apply custom %}
 |  ^^^^^ keyword.control.twig
 |        ^^^^^^ variable.function.filter.twig
+{{ foo|bar }}
+|     ^^^^ meta.function.filter.twig
+|      ^^^ meta.function-call.identifier.twig variable.function.filter.twig
 
 |==============================================================================
 | Functions
@@ -165,6 +169,11 @@
 
 {{ "now"|date('d/m/Y H:i', timezone="Europe/Paris") }}
 |             ^^^^^^^^^^^ meta.function.filter.twig meta.group.twig meta.function-call.arguments.twig meta.string.twig string.quoted.single.twig
+
+{# Custom functions #}
+{{ apply_foo(data, 'string') }}
+|  ^^^^^^^^^ meta.function-call.identifier.twig variable.function.twig
+|           ^^^^^^^^^^^^^^^^ meta.group.twig meta.function-call.arguments.twig
 
 |==============================================================================
 | Control Structure
