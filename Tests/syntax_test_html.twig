@@ -577,6 +577,11 @@
 |          ^^^ support.function.test.twig
 |              ^^ punctuation.definition.expression.end.twig
 
+{# Custom test #}
+{{ name is weird }}
+|       ^^ keyword.operator.comparison.test.twig
+|          ^^^^^ meta.function.test.twig meta.function-call.identifier.twig variable.function.test.twig
+
 {% if post.status is constant('Post::PUBLISHED') %}
 |^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.twig
 |^ punctuation.definition.statement.begin.twig
